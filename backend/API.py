@@ -24,6 +24,9 @@ def read_root():
 
 @app.get('/edges/{n}')
 def get_edges(n: int):
+    if n > 100:
+        return {"Response": "N must be <= 100"}
+
     data = []
     done = set()
 
@@ -42,3 +45,7 @@ def get_edges(n: int):
             done.add(tup)
 
     return data
+
+# to run ...
+# pip install -r API_requirements.txt
+# uvicorn API:app --host 0.0.0.0 --port 10000

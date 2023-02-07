@@ -19,3 +19,6 @@
 // to run script
 >> python script_name.py
 ```
+
+Dummy API endpoint: https://project-glovo-api.onrender.com/
+/edges/{n}: randomly generate n edges
