@@ -16,9 +16,15 @@
 >> cd backend
 >> .\Scripts\activate
 
+// stop virtual env
+>> deactivate
+
 // to run script
 >> python script_name.py
 ```
 
-Dummy API endpoint: https://project-glovo-api.onrender.com/
-/edges/{n}: randomly generate n edges
+
+Dummy API endpoint: // randomly generate N edges
+```
+https://project-glovo-api.onrender.com/edges/?n={N}/
+```

@@ -18,15 +18,8 @@ groups = [
 
 ngroups = len(groups)-1 
 
-@app.get('/')
-def read_root():
-    return {}
 
-@app.get('/edges/{n}')
-def get_edges(n: int):
-    if n > 100:
-        return {"Response": "N must be <= 100"}
-
+async def gen_edges(n: int): 
     data = []
     done = set()
 
@@ -45,6 +38,18 @@ def get_edges(n: int):
             done.add(tup)
 
     return data
+
+@app.get('/')
+def read_root():
+    return {}
+
+@app.get('/edges/')
+async def get_edges(n: int = 50): # generate 50 by default, unless specified
+    if n > 100:
+        return {"Response": "N must be <= 100"}
+
+    return await gen_edges(n)
+
 
 # to run ...
 # pip install -r API_requirements.txt
