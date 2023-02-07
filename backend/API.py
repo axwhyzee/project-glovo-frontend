@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import asyncio
 import random
 
 
@@ -47,8 +48,10 @@ def read_root():
 async def get_edges(n: int = 50): # generate 50 by default, unless specified
     if n > 100:
         return {"Response": "N must be <= 100"}
-
-    return await gen_edges(n)
+    
+    task = asyncio.create_task(gen_edges(n)) 
+    
+    return await task
 
 
 # to run ...
