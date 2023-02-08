@@ -32,6 +32,6 @@ Dummy API endpoints
 https://project-glovo-api.onrender.com/edges/?n={N}/
 
 // get list of news objects
-http://127.0.0.1:8000/news/
+https://project-glovo-api.onrender.com/news/
 ```
 
