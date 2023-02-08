@@ -26,7 +26,12 @@
 ```
 
 
-Dummy API endpoint (randomly generates N edges, N < 100)
+Dummy API endpoints
 ```
+// randomly generates N edges, N < 100
 https://project-glovo-api.onrender.com/edges/?n={N}/
+
+// get list of news objects
+http://127.0.0.1:8000/news/
 ```
+
