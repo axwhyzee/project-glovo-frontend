@@ -1,9 +1,18 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 import asyncio
 import random
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    # allow_credentials=True, # if credentials allowed, then cannot allow all origins
+    allow_methods=['*'],
+    allow_headers=['*'],
+)
 
 # each element is a list of keyphrases taken from a separate news article
 phrase_groups = [
