@@ -6,16 +6,16 @@ import json
 def getHref(a: str):
     return a[10:str.find(a, "hreflang") - 2]
 
-
 if __name__ == '__main__':
     breaking_news_url = 'https://www.straitstimes.com/breaking-news'
     base_url = 'https://www.straitstimes.com'
+    print("hi")
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}
     raw_breaking_news_page = requests.get(breaking_news_url, headers=headers)
     breaking_news_page = BeautifulSoup(raw_breaking_news_page.text, 'html.parser')
     card_list = breaking_news_page.find_all('div', {'class': 'card-body'})
-    with open('glovoStraitsTimes.json', 'w') as file:
+    with open('glovo.json', 'w') as file:
         file.write("[\n")
         for card_body in card_list:
             url = base_url + getHref(str(card_body.select("a")))
@@ -37,3 +37,5 @@ if __name__ == '__main__':
         file.write("]\n")
         file.close()
 exit()
+
+
