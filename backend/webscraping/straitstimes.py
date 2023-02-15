@@ -9,7 +9,6 @@ def getHref(a: str):
 if __name__ == '__main__':
     breaking_news_url = 'https://www.straitstimes.com/breaking-news'
     base_url = 'https://www.straitstimes.com'
-    print("hi")
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}
     raw_breaking_news_page = requests.get(breaking_news_url, headers=headers)
@@ -34,6 +33,3 @@ if __name__ == '__main__':
                 file.write(", \n")
         file.write("]\n")
         file.close()
-exit()
-
-
