@@ -27,13 +27,11 @@ if __name__ == '__main__':
             title = info_dict['@graph'][0]['headline'].encode("ascii", "ignore").decode()
             date_published = info_dict['@graph'][0]['datePublished']
             date_published = "-".join([date_published[8:10], date_published[5:7], date_published[:4]])
-            try:
-                publisher = info_dict['@graph'][0]['publisher']['name']
-            except KeyError:
-                publisher = "Straits Times"
+            publisher = "Straits Times"
             output_dict = {"URL": url, "Title": title, "Publisher": publisher, "Date": date_published, "Content": story}
             json.dump(output_dict, file)
-            file.write(", \n")
+            if card_body != card_list[-1]:
+                file.write(", \n")
         file.write("]\n")
         file.close()
 exit()
