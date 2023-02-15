@@ -15,7 +15,7 @@ if __name__ == '__main__':
     raw_breaking_news_page = requests.get(breaking_news_url, headers=headers)
     breaking_news_page = BeautifulSoup(raw_breaking_news_page.text, 'html.parser')
     card_list = breaking_news_page.find_all('div', {'class': 'card-body'})
-    with open('glovo.json', 'w') as file:
+    with open('straitstimes.json', 'w') as file:
         file.write("[\n")
         for card_body in card_list:
             url = base_url + getHref(str(card_body.select("a")))
