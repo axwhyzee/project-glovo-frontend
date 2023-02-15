@@ -25,7 +25,6 @@ if __name__ == '__main__':
             info_dict = json.loads(article_html.find("script", type="application/ld+json").text)
             title = info_dict['@graph'][0]['headline'].encode("ascii", "ignore").decode()
             date_published = info_dict['@graph'][0]['datePublished']
-            date_published = "-".join([date_published[8:10], date_published[5:7], date_published[:4]])
             publisher = "Straits Times"
             output_dict = {"URL": url, "Title": title, "Publisher": publisher, "Date": date_published, "Content": story}
             json.dump(output_dict, file)
