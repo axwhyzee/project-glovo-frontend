@@ -27,17 +27,8 @@ with open('glovoYahoo.json', 'w') as file:
         l = news_item.find("a")
         url[k] = l['href']
 
-
         cont = news_item.find('p').text
         content[k] = cont
-
-        """rep = requests.get(url[k])
-        broth = BeautifulSoup(rep.text, 'html.parser')
-        story = []
-        for temp in broth.find_all('div', class_='caas-body'):
-          story = story.append(temp.find('p').text)
-        #cont = content.replace('·', '').strip()
-        content[k] = story"""
 
         time = news_item.find('span', class_='fc-2nd').text
         # Clean time text
