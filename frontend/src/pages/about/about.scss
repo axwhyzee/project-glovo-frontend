@@ -1,0 +1,180 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: 60%;
+  height: 100vh;
+  margin: 0px auto;
+  font-family: poppins;
+
+  header {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    column-gap: 50px;
+
+    .title,
+    .content {
+      flex: 1;
+    }
+
+    .title {
+      h3 {
+        font-size: 36px;
+      }
+    }
+
+    .content {
+      h5 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+      }
+      p {
+        font-size: 14px;
+      }
+    }
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 50px;
+    row-gap: 70px;
+    padding: 50px 0px;
+
+    .profile {
+      display: flex;
+      justify-content: center;
+      position: relative;
+
+      figure {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        img {
+          width: 80%;
+        }
+
+        figcaption {
+          font-size: 16px;
+          font-weight: 500;
+          margin-top: 12px;
+          text-transform: capitalize;
+          cursor: pointer;
+        }
+
+        &::after {
+          content: attr(data-value);
+          width: 100%;
+          transform-origin: 0 0;
+          transform: rotate(90deg);
+          position: absolute;
+          text-transform: uppercase;
+          font-size: 12px;
+          right: -92%;
+        }
+      }
+
+      &:nth-child(2) {
+        margin-top: 70px;
+      }
+      &:nth-child(4) {
+        margin-top: -70px;
+      }
+      &:nth-child(6) {
+        margin-top: -70px;
+      }
+    }
+  }
+
+  footer {
+    height: 5%;
+    color: #bdbdbd;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  body {
+    width: 70%;
+
+    main {
+      column-gap: 50px;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  body {
+    width: 80%;
+
+    main {
+      column-gap: 35px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    width: 90%;
+
+    main {
+      column-gap: 25px;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    width: 90%;
+    height: auto;
+    margin: 50px auto 10px;
+
+    header {
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      row-gap: 20px;
+
+      .title {
+        align-self: flex-start;
+
+        h3 {
+          font-size: 30px;
+        }
+      }
+    }
+
+    main {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 0px;
+      row-gap: 0px;
+
+      .profile {
+        &:nth-child(2),
+        &:nth-child(4),
+        &:nth-child(6) {
+          margin-top: 50px;
+        }
+        &:nth-child(3),
+        &:nth-child(5) {
+          margin-top: 0px;
+        }
+      }
+    }
+  }
+}
