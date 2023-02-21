@@ -1,0 +1,45 @@
+.sidebar {
+    width: 35px;
+    height: 100vh;
+    background: transparent;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transition: .5s;
+    padding: 20px;
+}
+
+.toggle-sidebar {
+    width: 40px;
+    height: 60px;
+    background-color: #c5c5c5;
+    color: #ffffff;
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%) scaleX(.5);
+    z-index: 99;
+    transition: .2s;
+    padding: 5px;
+    border: none;
+    border-radius: 8px;
+}
+
+.toggle-sidebar:hover {
+    cursor: pointer;
+}
+
+.sidebar.expanded {
+    width: 300px;
+    background-color: #0f594e;
+    box-shadow: 0 0 10px 2px #020202b0;
+}
+
+.expanded .toggle-sidebar {
+    background: transparent;
+    color: #d4d4d4;
+}
