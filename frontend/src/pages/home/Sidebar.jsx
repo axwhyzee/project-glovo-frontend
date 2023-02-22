@@ -31,7 +31,19 @@ function Sidebar() {
                     justifyContent="center" 
                     alignItems={"center"}
                     > 
-                    {posts}
+                    {posts && 
+                        posts.map((item, index) => (
+                        <IndivPost 
+                            date={new Date(`${item.date}`).toLocaleDateString()} 
+                            description = {item.description}
+                            keywords = {item.keywords}
+                            // id = {item._id}
+                            publisher = {item.publisher}
+                            title = {item.title}
+                            // key={index} 
+                            url = {item.url}
+                        /> 
+                    ))}
                 </Box>
         </section>
     )
