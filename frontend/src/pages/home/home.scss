@@ -44,10 +44,15 @@
     color: #d4d4d4;
 }
 
+#graph {
+    max-width: 100%; 
+    height: auto; 
+    height: intrinsic;
+}
 
-svg g.node .lower {
+#graph g.node .lower {
     font-weight: bold;
 }
-svg g.node .name {
+#graph g.node .name {
     font-size: 0.7rem;
 }
