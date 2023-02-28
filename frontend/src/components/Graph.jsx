@@ -67,6 +67,35 @@ function Graph() {
     const forceCollide = d3.forceCollide().radius(radius);
 
     useEffect(() => {
+
+        // Tooltip feature
+        let tooltip = d3
+            .select("body")
+            .append("div") // the tooltip always "exists" as its own html div, even when not visible
+            .style("position", "absolute") // the absolute position is necessary so that we can manually define its position later
+            .style("visibility", "hidden") // hide it from default at the start so it only appears on hover
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+            .attr("class", "tooltip");
+            
+        const mousemove_tooltip = (evt, d) => {
+            return tooltip
+                .html("<h4>" + d.name +"</h4>")
+                .style("visibility", "visible") 
+                .style("top", evt.pageY + "px") 
+                .style("left", evt.pageX + "px");
+        }
+
+        const mouseleave_tooltip = () => {
+            return tooltip
+                .transition()
+                .duration(0)
+                .style("visibility", "hidden");
+        }
+
         const svg = d3
             .select("#graph-root");
 
@@ -89,7 +118,11 @@ function Graph() {
             .data(nodes, (d) => d.i)
             .join("g")
             .classed("node", true)
-            .attr("key", (d) => d.i);
+            .attr("key", (d) => d.i)
+            //TOOLTIP
+            //.on("mouseover", mouseover_tooltip)
+            .on("mousemove", mousemove_tooltip) 
+            .on("mouseleave", mouseleave_tooltip); 
 
         const circle = node
             .append("circle")
@@ -108,7 +141,7 @@ function Graph() {
             .append("text")
             .classed("name", true)
             .attr("dy", 22)
-            .text((d) => d.name);
+            //.text((d) => d.name); Test remove text
 
         // Set up events
 
@@ -117,7 +150,8 @@ function Graph() {
             .x((d) => d.x)
             .y((d) => d.y)
             .addAll(nodes);
-
+        
+        
         const ticked = () => {
             node.attr("transform", (d) => `translate(${d.x}, ${d.y})`);
 
