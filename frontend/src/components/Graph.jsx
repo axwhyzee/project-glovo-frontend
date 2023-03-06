@@ -59,7 +59,7 @@ function Graph() {
             d3.mean(edges, (d) => d.w) - 1 * d3.deviation(edges, (d) => d.w),
             d3.max(edges, (d) => d.w)
         ])
-        .interpolator(d3.interpolateBuGn);
+        .interpolator((scale) => { return d3.interpolateGreys(scale * 0.7 + 0.3); }); // min = 0.3 so edge does not become white (cannot be seen on light bg)
 
     // Construct the forces.
     const forceNode = d3.forceManyBody().strength(-300);
@@ -72,20 +72,13 @@ function Graph() {
         let tooltip = d3
             .select("body")
             .append("div") // the tooltip always "exists" as its own html div, even when not visible
-            .style("position", "absolute") // the absolute position is necessary so that we can manually define its position later
-            .style("visibility", "hidden") // hide it from default at the start so it only appears on hover
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
             .attr("class", "tooltip");
-            
+
         const mousemove_tooltip = (evt, d) => {
             return tooltip
-                .html("<h4>" + d.name +"</h4>")
-                .style("visibility", "visible") 
-                .style("top", evt.pageY + "px") 
+                .html("<div>" + d.name + "</div>") // changed from h4 element to div because <h*> & <p> tags have natural padding top & btm
+                .style("visibility", "visible")
+                .style("top", (evt.pageY + 2 * radius) + "px") // + radius to prevent tooltip from overlapping over the node, creating jittery effect
                 .style("left", evt.pageX + "px");
         }
 
@@ -101,7 +94,7 @@ function Graph() {
 
         const link = svg
             .append("g")
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 4)
             .attr("stroke-opacity", 0.2)
             .attr("stroke", "black")
             .selectAll("line.edge")
@@ -120,14 +113,15 @@ function Graph() {
             .classed("node", true)
             .attr("key", (d) => d.i)
             //TOOLTIP
-            //.on("mouseover", mouseover_tooltip)
-            .on("mousemove", mousemove_tooltip) 
-            .on("mouseleave", mouseleave_tooltip); 
+            .on("mousemove", mousemove_tooltip) // mousemove instead of mouseover to fix jitter on hover
+            .on("mouseleave", mouseleave_tooltip)
+            .call(d3.drag()
+                .on("drag", null)); // make nodes undraggable
 
         const circle = node
             .append("circle")
-            .attr("fill", "white")
-            .attr("stroke", "black")
+            .attr("fill", "#607774")
+            .attr("stroke", "#666666")
             .attr("stroke-width", 1)
             .attr("r", radius);
 
@@ -141,17 +135,15 @@ function Graph() {
             .append("text")
             .classed("name", true)
             .attr("dy", 22)
-            //.text((d) => d.name); Test remove text
+        //.text((d) => d.name); Test remove text
 
         // Set up events
-
         let quadtree = d3
             .quadtree()
             .x((d) => d.x)
             .y((d) => d.y)
             .addAll(nodes);
-        
-        
+
         const ticked = () => {
             node.attr("transform", (d) => `translate(${d.x}, ${d.y})`);
 

@@ -9,6 +9,7 @@ if defined _OLD_CODEPAGE (
 )
 
 set VIRTUAL_ENV=C:\Users\Siah Wee Hung\Desktop\Folders\2. School\NTU\CCA\HackOSS\GloVo\project-glovo\backend
+set VIRTUAL_ENV=C:\Users\Siah Wee Hung\Desktop\Folders\2. School\NTU\CCA\HackOSS\project-glovo
 
 if not defined PROMPT set PROMPT=$P$G
 

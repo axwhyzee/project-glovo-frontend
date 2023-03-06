@@ -1,6 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    background-color: #749793dd;
+    margin: 0;
+    padding: 0;
+}
+
+.home {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+}
+
 .sidebar {
     width: 35px;
-    height: 100vh;
     background: transparent;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -10,12 +30,14 @@
     bottom: 0;
     transition: .5s;
     padding: 20px;
+    overflow-y: auto;
+    z-index: 98;
 }
 
 .toggle-sidebar {
     width: 40px;
     height: 60px;
-    background-color: #c5c5c5;
+    background-color: rgba(187, 187, 187, 0.4);
     color: #ffffff;
     font-size: 40px;
     position: absolute;
@@ -27,6 +49,7 @@
     padding: 5px;
     border: none;
     border-radius: 8px;
+    outline: none;
 }
 
 .toggle-sidebar:hover {
@@ -35,8 +58,9 @@
 
 .sidebar.expanded {
     width: 300px;
-    background-color: #0f594e;
-    box-shadow: 0 0 10px 2px #020202b0;
+    background-color: #595D5Eee;
+    box-shadow: 0 0 20px 2px #0000007e;
+    color: #607774
 }
 
 .expanded .toggle-sidebar {
@@ -45,14 +69,36 @@
 }
 
 #graph {
-    max-width: 100%; 
-    height: auto; 
+    max-width: 100%;
+    height: auto;
     height: intrinsic;
 }
 
 #graph g.node .lower {
     font-weight: bold;
 }
+
 #graph g.node .name {
     font-size: 0.7rem;
+}
+
+g.node:hover,
+line:hover {
+    cursor: pointer;
+}
+
+circle {
+    filter: drop-shadow(3px 3px 2px #00000033);
+}
+
+.tooltip {
+    background-color: #A4B8B6ee;
+    font-weight: bold;
+    position: absolute;
+    /* the absolute position is necessary so that we can manually define its position later */
+    visibility: hidden;
+    /* hide it from default at the start so it only appears on hover */
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
 }
