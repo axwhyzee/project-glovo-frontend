@@ -1,5 +1,7 @@
 # **Project GloVo**
 
+![System Design](https://user-images.githubusercontent.com/34325457/223158960-56878a3c-84bc-4342-bcd6-45b22b10ab60.png)
+
 ### [Click here for project schedule](https://docs.google.com/spreadsheets/d/1tHkNYdiojzDxUX0CcpaGhTUULMq8ZHx-PNVAw6JEZ00/edit?usp=sharing)
 
 <ins>Project Description</ins>
