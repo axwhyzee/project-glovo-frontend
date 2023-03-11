@@ -10,6 +10,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import ButtonBase from '@mui/material/ButtonBase';
 import Divider from '@mui/material/Divider';
+import CardMedia from '@mui/material/CardMedia';
+import { CardActionArea } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 /**
  * title
  * url
@@ -20,51 +23,28 @@ import Divider from '@mui/material/Divider';
 
 
 function IndivPost({title, url, publisher, keywords, date, id}) {
+  const navigate = useNavigate()
   return (
-    <Paper
-    variant="outlined"
-      sx={{
-        p: 2,
-        margin: 'auto',
-        maxWidth: "100%",
-        width: "100%",
-        flexGrow: 1,
-      
-      }}
-    >
       <Grid container spacing={1} >
-        {/* <Grid item>
-          <ButtonBase sx={{ width: 64, height: 64 }} >
-            <img alt="small-box" src={"sth"} />
-          </ButtonBase>
-        </Grid> */}
-        <Grid item xs={12}md={12} container >
-          <Grid item ms container direction="column">
-            <Grid item xs={12} md ={12}>
-              <Typography gutterBottom variant="subtitle1" component="div">
-                
+          <Card sx={{ maxWidth: 345 }}>
+          <CardActionArea onClick = {() => window.location.replace(`${url}`)}  >
+            <CardMedia
+              component="img"
+              height="140"
+              image="https://i.natgeofe.com/n/665bbbca-1316-48b6-bce1-1ccb984a7546/0000014e-7468-d37e-a7de-ffe951310001_3x2.jpg"
+              alt="green iguana"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {title}
               </Typography>
-              <Typography sx={{width: "100%"}} component="legend">{title} {publisher}</Typography>
-              
-              <Typography sx={{ fontWeight: 'bold' }} variant="body1" gutterBottom>
-                {url}
+              <Typography variant="body2" color="text.secondary">
+                {publisher}
               </Typography>
-              <Typography variant="body1" color="text.secondary">
-              {/* <LocationOnIcon />{posts.location} {posts.days}  */}
-              </Typography>
-              <Typography variant="body1" color="text.primary">
-              {date}
-              </Typography>
-              <Divider></Divider>
-              <Typography variant="body1" color="text.secondary">
-              keywords: {keywords}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        
+            </CardContent>
+          </CardActionArea>
+        </Card>
       </Grid>
-    </Paper>
   )
 }
 

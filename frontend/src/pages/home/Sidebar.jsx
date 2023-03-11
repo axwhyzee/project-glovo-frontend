@@ -41,9 +41,10 @@ function Sidebar() {
             <Box 
                 display="flex" 
                 flexDirection={'column'} 
-                padding ={3} 
+                padding ={2} 
                 justifyContent="center" 
                 alignItems={"center"}
+                gap = {2}
                 > 
                 {posts && 
                     posts.map((item, index) => (
@@ -51,10 +52,10 @@ function Sidebar() {
                         date={new Date(`${item.date}`).toLocaleDateString()} 
                         description = {item.description}
                         keywords = {item.keywords}
-                        // id = {item._id}
+                        id = {item._id}
                         publisher = {item.publisher}
                         title = {item.title}
-                        // key={index} 
+                        key={index} 
                         url = {item.url}
                     /> 
                 ))}
