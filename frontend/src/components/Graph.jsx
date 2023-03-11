@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
+import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
 import _ from "lodash";
 
-function Graph() {
+const DUMMY_DATA = () => {
     const nodes = [
         { i: 0, upper: "Α", lower: "α", name: "Alpha", en: "a" },
         { i: 1, upper: "Β", lower: "β", name: "Beta", en: "b" },
@@ -29,7 +30,8 @@ function Graph() {
         { i: 21, upper: "Χ", lower: "χ", name: "Chi", en: "ch" },
         { i: 22, upper: "Ψ", lower: "ψ", name: "Psi", en: "ps" },
         { i: 23, upper: "Ω", lower: "ω", name: "Omega", en: "o" }
-    ]
+    ];
+
     const edges = ((nodes, n = Math.trunc(nodes.length * 1.5)) => {
         const sampleSpace = Array.from(
             { length: nodes.length - 1 },
@@ -42,34 +44,70 @@ function Graph() {
             t: y,
             w: Math.trunc(Math.random() * 10 + 1)
         }));
-    })(nodes).map((d) => ({ ...d, source: d.s, target: d.t }))
+    })(nodes).map((d) => ({ ...d, source: d.s, target: d.t }));
 
+    return { nodes, edges };
+};
+
+const _translateFromAPI = (apiEdges) => {
+    const nodes = _.chain(apiEdges)
+        .flatMap(({ src, dst }) => [src, dst])
+        .uniq()
+        .sort()
+        .map((name, i) => ({ i, name }))
+        .value();
+    const association = _.chain(nodes)
+        .map((p) => [p.name, p.i])
+        .fromPairs()
+        .value();
+    const edges = _.chain(apiEdges)
+        .map((e, i) => {
+            const s = association[e.src];
+            const t = association[e.dst];
+            const w = e.k[0];
+            return { i, s, t, w, source: s, target: t };
+        })
+        .value();
+    return { nodes, edges };
+};
+
+const _fetchFromAPI = async () => {
+    const data = await fetch(
+        "https://project-glovo-api.onrender.com/edges/?n=100"
+    ).then((r) => r.json());
+    return _translateFromAPI(data);
+}
+
+function Graph() {
+    const [data, setData] = useState({ nodes: [], edges: [] });
     const { width, height } = useWindowSize();
+    const [transform, setTransform] = useState("");
+
     const radius = 10;
 
     // Construct the scales.
-    const weightScale = () =>
-        d3.scaleLog().domain([1, d3.max(edges, (d) => d.w)]);
+    const ref = useD3((svg) => {
+        const { nodes, edges } = data;
+        const weightScale = () =>
+            d3.scaleLog().domain([1, d3.max(edges, (d) => d.w)]);
 
-    const linkOpacity = weightScale().range([0.1, 0.25]);
-    const linkColor = d3
-        .scaleDivergingLog()
-        .domain([
-            1,
-            d3.mean(edges, (d) => d.w) - 1 * d3.deviation(edges, (d) => d.w),
-            d3.max(edges, (d) => d.w)
-        ])
-        .interpolator((scale) => { return d3.interpolateGreys(scale * 0.7 + 0.3); }); // min = 0.3 so edge does not become white (cannot be seen on light bg)
+        const linkOpacity = weightScale().range([0.1, 0.25]);
+        const linkColor = d3
+            .scaleDivergingLog()
+            .domain([
+                1,
+                d3.mean(edges, (d) => d.w) - 1 * d3.deviation(edges, (d) => d.w),
+                d3.max(edges, (d) => d.w)
+            ])
+            .interpolator((scale) => { return d3.interpolateGreys(scale * 0.7 + 0.3); }); // min = 0.3 so edge does not become white (cannot be seen on light bg)
 
-    // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-300);
-    const forceLink = d3.forceLink(edges).id((node) => node.i);
-    const forceCollide = d3.forceCollide().radius(radius);
-
-    useEffect(() => {
+        // Construct the forces.
+        const forceNode = d3.forceManyBody().strength(-300);
+        const forceLink = d3.forceLink(edges).id((node) => node.i);
+        const forceCollide = d3.forceCollide().radius(radius);
 
         // Tooltip feature
-        let tooltip = d3
+        const tooltip = d3
             .select("body")
             .append("div") // the tooltip always "exists" as its own html div, even when not visible
             .attr("class", "tooltip");
@@ -89,14 +127,32 @@ function Graph() {
                 .style("visibility", "hidden");
         }
 
-        const svg = d3
-            .select("#graph-root");
+        const renderNode = base => {
+            const node = base.append("g")
+                .classed("node", true)
+                .attr("key", (d) => d.i)
+                //TOOLTIP
+                .on("mousemove", mousemove_tooltip) // mousemove instead of mouseover to fix jitter on hover
+                .on("mouseleave", mouseleave_tooltip);
+
+            const circle = node
+                .append("circle")
+                .classed("point", true);
+
+            const lower = node
+                .append("text")
+                .classed("lower", true)
+                .attr("dy", radius / 2)
+                .text((d) => d.lower);
+
+            const name = node
+                .append("text")
+                .classed("name", true)
+                .attr("dy", 22)
+                .text((d) => d.name);
+        };
 
         const link = svg
-            .append("g")
-            .attr("stroke-width", 4)
-            .attr("stroke-opacity", 0.2)
-            .attr("stroke", "black")
             .selectAll("line.edge")
             .data(edges, (d) => d.i)
             .join("line")
@@ -104,38 +160,11 @@ function Graph() {
             .attr("stroke-opacity", (d) => linkOpacity(d.w));
 
         const node = svg
-            .append("g")
-            .attr("font-family", "Open Sans")
-            .attr("text-anchor", "middle")
             .selectAll("g.node")
             .data(nodes, (d) => d.i)
-            .join("g")
-            .classed("node", true)
-            .attr("key", (d) => d.i)
-            //TOOLTIP
-            .on("mousemove", mousemove_tooltip) // mousemove instead of mouseover to fix jitter on hover
-            .on("mouseleave", mouseleave_tooltip)
-            .call(d3.drag()
-                .on("drag", null)); // make nodes undraggable
-
-        const circle = node
-            .append("circle")
-            .attr("fill", "#607774")
-            .attr("stroke", "#666666")
-            .attr("stroke-width", 1)
-            .attr("r", radius);
-
-        const lower = node
-            .append("text")
-            .classed("lower", true)
-            .attr("dy", radius / 2)
-            .text((d) => d.lower);
-
-        const name = node
-            .append("text")
-            .classed("name", true)
-            .attr("dy", 22)
-        //.text((d) => d.name); Test remove text
+            .join(
+                enter => renderNode(enter)
+            );
 
         // Set up events
         let quadtree = d3
@@ -227,10 +256,19 @@ function Graph() {
         };
 
         const handleZoom = (evt) => {
-            d3.select("#graph").attr("transform", evt.transform);
+            setTransform(evt.transform);
         };
 
-        const zoom = d3.zoom().on("zoom", handleZoom).scaleExtent([0.4, 3]);
+        const zoomFix = (evt) => {
+            evt.preventDefault();
+            return (!evt.ctrlKey || evt.type === 'wheel') && !evt.button;
+        };
+
+        const zoom = d3.zoom()
+            .extent([[0, 0], [width, height]])
+            .scaleExtent([0.4, 3])
+            .filter(zoomFix)
+            .on("zoom", handleZoom);
 
         const simulation = d3
             .forceSimulation(nodes, (d) => d.i)
@@ -244,11 +282,20 @@ function Graph() {
         svg.call(handleHover);
         node.call(handleClick);
         svg.call(zoom);
+    }, [data]);
+
+    useEffect(() => {
+        _fetchFromAPI().then(p => setData(p));
     }, [false]);
 
     return (
-        <svg id="graph" width={width} height={height} viewBox={[[-width / 2, -height / 2, width, height]]}>
-            <g id="graph-root"></g>
+        <svg
+            className="network-graph-style-1"
+            ref={ref}
+            width={width}
+            height={height}
+            viewBox={[[-width / 2, -height / 2, width, height]]}
+            transform={transform}>
         </svg>
     );
 }

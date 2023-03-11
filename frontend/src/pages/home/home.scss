@@ -68,27 +68,44 @@ body {
     color: #d4d4d4;
 }
 
-#graph {
+.network-graph-style-1 {
+    font-family: "Roboto";
+    text-anchor: middle;
     max-width: 100%;
     height: auto;
-    height: intrinsic;
 }
 
-#graph g.node .lower {
+.network-graph-style-1 g.edge {
+    stroke-width: 4;
+    stroke: black;
+}
+
+.network-graph-style-1 g.edge.activated {
+    stroke-opacity: 1;
+}
+
+.network-graph-style-1 g.edge.deactivated {
+    stroke-opacity: 0.1;
+}
+
+.network-graph-style-1 g.node .lower {
     font-weight: bold;
 }
 
-#graph g.node .name {
+.network-graph-style-1 g.node .name {
     font-size: 0.7rem;
 }
 
-g.node:hover,
-line:hover {
-    cursor: pointer;
+.network-graph-style-1 g.node .point {
+    fill: #607774;
+    stroke: #666666;
+    stroke-width: 1;
+    r: 5;
 }
 
-circle {
-    filter: drop-shadow(3px 3px 2px #00000033);
+.network-graph-style-1 g.node:hover,
+line:hover {
+    cursor: pointer;
 }
 
 .tooltip {
