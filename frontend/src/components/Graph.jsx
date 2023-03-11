@@ -85,13 +85,14 @@ function Graph() {
 
     const radius = 10;
 
-    // Construct the scales.
     const ref = useD3((svg) => {
         const { nodes, edges } = data;
+        // Construct the scales.
         const weightScale = () =>
             d3.scaleLog().domain([1, d3.max(edges, (d) => d.w)]);
 
         const linkOpacity = weightScale().range([0.1, 0.25]);
+        const nameOpacity = d3.scalePow().exponent(2).domain([0.7, 1]).range([0, 1]);
         
         // const linkColor = d3
         //     .scaleDivergingLog()
@@ -260,6 +261,8 @@ function Graph() {
 
         const handleZoom = (evt) => {
             setTransform(evt.transform);
+            node.select("text.name")
+                .attr("opacity", nameOpacity(evt.transform.k));
         };
 
         const zoomFix = (evt) => {
