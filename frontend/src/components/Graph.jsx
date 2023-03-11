@@ -92,14 +92,15 @@ function Graph() {
             d3.scaleLog().domain([1, d3.max(edges, (d) => d.w)]);
 
         const linkOpacity = weightScale().range([0.1, 0.25]);
-        const linkColor = d3
-            .scaleDivergingLog()
-            .domain([
-                1,
-                d3.mean(edges, (d) => d.w) - 1 * d3.deviation(edges, (d) => d.w),
-                d3.max(edges, (d) => d.w)
-            ])
-            .interpolator((scale) => { return d3.interpolateGreys(scale * 0.7 + 0.3); }); // min = 0.3 so edge does not become white (cannot be seen on light bg)
+        
+        // const linkColor = d3
+        //     .scaleDivergingLog()
+        //     .domain([
+        //         1,
+        //         d3.mean(edges, (d) => d.w) - 1 * d3.deviation(edges, (d) => d.w),
+        //         d3.max(edges, (d) => d.w)
+        //     ])
+        //     .interpolator((scale) => { return d3.interpolateGreys(scale * 0.7 + 0.3); }); // min = 0.3 so edge does not become white (cannot be seen on light bg)
 
         // Construct the forces.
         const forceNode = d3.forceManyBody().strength(-300);
@@ -201,19 +202,20 @@ function Graph() {
                 .value();
 
             const t = svg.transition().duration(75);
+            const linkLocalDash = d3.scaleLog().range([4, 0]).domain([1, d3.max(focusLinks, (d) => d.w)]);
+            const linkLocalOpacity = d3.scaleLog().range([0.2, 0.7]).domain([1, d3.max(focusLinks, (d) => d.w)]);
 
             if (focusNode) {
                 svg
                     .selectAll("line.edge")
                     .filter((d) => interestedLinks.includes(d.i))
                     .transition(t)
-                    .attr("stroke-opacity", 1)
-                    .attr("stroke", (d) => linkColor(d.w));
+                    .attr("stroke-opacity", (d) => linkLocalOpacity(d.w))
+                    .attr("stroke-dasharray", (d) => `3 ${linkLocalDash(d.w) * 2}`);
                 svg
                     .selectAll("line.edge")
                     .filter((d) => !interestedLinks.includes(d.i))
                     .transition(t)
-                    .attr("stroke", "black")
                     .attr("stroke-opacity", 0.1);
                 svg
                     .selectAll("g.node")
@@ -230,7 +232,8 @@ function Graph() {
                     .selectAll("line.edge")
                     .transition(t)
                     .attr("stroke", "black")
-                    .attr("stroke-opacity", (d) => linkOpacity(d.w));
+                    .attr("stroke-opacity", (d) => linkOpacity(d.w))
+                    .attr("stroke-dasharray", null);
                 svg.selectAll("g.node").transition(t).attr("opacity", 1);
             }
         };

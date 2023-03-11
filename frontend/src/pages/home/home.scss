@@ -75,17 +75,9 @@ body {
     height: auto;
 }
 
-.network-graph-style-1 g.edge {
-    stroke-width: 4;
+.network-graph-style-1 line.edge {
+    stroke-width: 1;
     stroke: black;
-}
-
-.network-graph-style-1 g.edge.activated {
-    stroke-opacity: 1;
-}
-
-.network-graph-style-1 g.edge.deactivated {
-    stroke-opacity: 0.1;
 }
 
 .network-graph-style-1 g.node .lower {
