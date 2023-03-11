@@ -150,7 +150,7 @@ function Graph() {
             const name = node
                 .append("text")
                 .classed("name", true)
-                .attr("dy", 22)
+                .attr("dy", 15)
                 .text((d) => d.name);
         };
 
