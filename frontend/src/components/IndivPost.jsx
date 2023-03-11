@@ -5,7 +5,11 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import {Box } from '@mui/material';
+import {Box, IconButton } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import ButtonBase from '@mui/material/ButtonBase';
+import Divider from '@mui/material/Divider';
 /**
  * title
  * url
@@ -17,51 +21,50 @@ import {Box } from '@mui/material';
 
 function IndivPost({title, url, publisher, keywords, date, id}) {
   return (
-    <Card sx={{ 
-        width: "50%", 
-        height: "60%", 
-        margin: 1, 
-        padding:1, 
-        display: "flex", 
-        flexDirection:"column", 
-        boxShadow:"5px 5px 10px #ccc" 
-    }}>
-    <CardHeader
-      avatar={
-        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-          R
-        </Avatar>
-      }
-    //   action={
-    //     <IconButton aria-label="settings">
-    //       {<EditLocationAltIcon />}
-    //     </IconButton>
-    //   }
-      title={title}
-      header = {title}
-      subheader={date }
-    />
-    {/**Bascially, if we are note passing in a static image, we need to change image="" to src="" */}
-    {/* <img
-      height="194"
-      src={image}
-      alt={title}
-    /> */}
-    <CardContent>
-      <Typography paddingBottom={1} variant="h6" color="text.secondary">
-        {title}
-      </Typography>
-      <hr />
-      <Box paddingTop={1} display="flex">
-        <Typography width="170px" fontWeight={"bold"} variant="caption">
-            {publisher}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-            {keywords}
-        </Typography>
-      </Box>
-    </CardContent>
-    </Card>
+    <Paper
+    variant="outlined"
+      sx={{
+        p: 2,
+        margin: 'auto',
+        maxWidth: "100%",
+        width: "100%",
+        flexGrow: 1,
+      
+      }}
+    >
+      <Grid container spacing={1} >
+        {/* <Grid item>
+          <ButtonBase sx={{ width: 64, height: 64 }} >
+            <img alt="small-box" src={"sth"} />
+          </ButtonBase>
+        </Grid> */}
+        <Grid item xs={12}md={12} container >
+          <Grid item ms container direction="column">
+            <Grid item xs={12} md ={12}>
+              <Typography gutterBottom variant="subtitle1" component="div">
+                
+              </Typography>
+              <Typography sx={{width: "100%"}} component="legend">{title} {publisher}</Typography>
+              
+              <Typography sx={{ fontWeight: 'bold' }} variant="body1" gutterBottom>
+                {url}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+              {/* <LocationOnIcon />{posts.location} {posts.days}  */}
+              </Typography>
+              <Typography variant="body1" color="text.primary">
+              {date}
+              </Typography>
+              <Divider></Divider>
+              <Typography variant="body1" color="text.secondary">
+              keywords: {keywords}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        
+      </Grid>
+    </Paper>
   )
 }
 
