@@ -1,10 +1,10 @@
 import React from 'react'
 import "./about.scss"
-
+import Navbar from '../../components/Navbar'
 function About() {
   return (
     <>
-
+    <Navbar></Navbar>
     <header>
         <div class="title">
             <h3>The creative crew</h3>
