@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
 import _ from "lodash";
-import { timeThursdays } from 'd3';
 
 const DUMMY_DATA = () => {
     const nodes = [
@@ -50,12 +49,20 @@ const DUMMY_DATA = () => {
     return { nodes, edges };
 };
 
+const mkTicker = function*() {
+    let i = 0;
+    while (true) yield i++;
+};
+
+const nodeId = mkTicker();
+const edgeId = mkTicker();
+
 const _translateFromAPI = (apiEdges) => {
     const nodes = _.chain(apiEdges)
         .flatMap(({ src, dst }) => [src, dst])
         .uniq()
         .sort()
-        .map((name, i) => ({ i, name }))
+        .map((name, i) => ({ i: nodeId.next().value, name }))
         .value();
     const association = _.chain(nodes)
         .map((p) => [p.name, p.i])
@@ -66,7 +73,7 @@ const _translateFromAPI = (apiEdges) => {
             const s = association[e.src];
             const t = association[e.dst];
             const w = e.k[0];
-            return { i, s, t, w, source: s, target: t };
+            return { i: edgeId.next().value, s, t, w, source: s, target: t };
         })
         .value();
     return { nodes, edges };
@@ -145,13 +152,22 @@ function Graph() {
                 .append("text")
                 .classed("lower", true)
                 .attr("dy", radius / 2)
-                .text((d) => d.lower);
+                //.text((d) => d.i);
 
             const name = node
                 .append("text")
                 .classed("name", true)
                 .attr("dy", 15)
                 .text((d) => d.name);
+
+            node.on("click", function (evt, d) {
+                console.log("Node selected", d);
+                // evt.currentTarget.dispatchEvent(
+                //   new CustomEvent("input", {
+                //     bubbles: true
+                //   })
+                // );
+            });
         };
 
         const link = svg
@@ -167,7 +183,9 @@ function Graph() {
             .selectAll("g.node")
             .data(nodes, (d) => d.i)
             .join(
-                enter => renderNode(enter)
+                enter => renderNode(enter),
+                update => update,
+                exit => exit.remove()
             );
 
         // Set up events
@@ -181,7 +199,7 @@ function Graph() {
         let transform = null;
 
         const ticked = () => {
-            node.attr("transform", (d) => `translate(${d.x}, ${d.y})`);
+            svg.selectAll("g.node").attr("transform", (d) => `translate(${d.x}, ${d.y})`);
 
             link
                 .attr("x1", (d) => d.source.x)
@@ -249,21 +267,9 @@ function Graph() {
                 let pos = d3.pointer(evt, this);
                 if (transform) pos = transform.invert(pos);
                 const d = quadtree.find(pos[0], pos[1], 30);
-                console.log(d3.pointer(evt, this), pos, quadtree, transform);
                 update(d);
             }
             root.on("pointermove", _.debounce(onMouseEnter));
-        };
-
-        const handleClick = (node) => {
-            node.on("click", function (evt) {
-                console.log("Node selected", nodes.find(p => p.i === Number(d3.select(this).attr("key"))));
-                // evt.currentTarget.dispatchEvent(
-                //   new CustomEvent("input", {
-                //     bubbles: true
-                //   })
-                // );
-            });
         };
 
         const handleZoom = (evt) => {
@@ -294,7 +300,6 @@ function Graph() {
             .on("tick", ticked);
 
         svg.call(handleHover);
-        node.call(handleClick);
         svg.call(zoom);
     }, [data]);
 
