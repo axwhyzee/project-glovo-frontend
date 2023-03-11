@@ -81,7 +81,6 @@ const _fetchFromAPI = async () => {
 function Graph() {
     const [data, setData] = useState({ nodes: [], edges: [] });
     const { width, height } = useWindowSize();
-    const [transform, setTransform] = useState("");
 
     const radius = 10;
 
@@ -155,6 +154,7 @@ function Graph() {
         };
 
         const link = svg
+            .select(".root")
             .selectAll("line.edge")
             .data(edges, (d) => d.i)
             .join("line")
@@ -162,6 +162,7 @@ function Graph() {
             .attr("stroke-opacity", (d) => linkOpacity(d.w));
 
         const node = svg
+            .select(".root")
             .selectAll("g.node")
             .data(nodes, (d) => d.i)
             .join(
@@ -260,7 +261,7 @@ function Graph() {
         };
 
         const handleZoom = (evt) => {
-            setTransform(evt.transform);
+            svg.select(".root").attr("transform", evt.transform);
             node.select("text.name")
                 .attr("opacity", nameOpacity(evt.transform.k));
         };
@@ -300,8 +301,8 @@ function Graph() {
             ref={ref}
             width={width}
             height={height}
-            viewBox={[[-width / 2, -height / 2, width, height]]}
-            transform={transform}>
+            viewBox={[[-width / 2, -height / 2, width, height]]}>
+            <g className="root"></g>
         </svg>
     );
 }
