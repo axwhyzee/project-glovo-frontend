@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
 import _ from "lodash";
+import { timeThursdays } from 'd3';
 
 const DUMMY_DATA = () => {
     const nodes = [
@@ -176,6 +177,9 @@ function Graph() {
             .y((d) => d.y)
             .addAll(nodes);
 
+        // After zoom/pan, need to keep track so can recompute quadtree location
+        let transform = null;
+
         const ticked = () => {
             node.attr("transform", (d) => `translate(${d.x}, ${d.y})`);
 
@@ -242,11 +246,13 @@ function Graph() {
 
         const handleHover = (root) => {
             function onMouseEnter(evt) {
-                const pos = d3.pointer(evt, this);
+                let pos = d3.pointer(evt, this);
+                if (transform) pos = transform.invert(pos);
                 const d = quadtree.find(pos[0], pos[1], 30);
+                console.log(d3.pointer(evt, this), pos, quadtree, transform);
                 update(d);
             }
-            root.on("mousemove", _.debounce(onMouseEnter));
+            root.on("pointermove", _.debounce(onMouseEnter));
         };
 
         const handleClick = (node) => {
@@ -261,6 +267,7 @@ function Graph() {
         };
 
         const handleZoom = (evt) => {
+            transform = evt.transform;
             svg.select(".root").attr("transform", evt.transform);
             node.select("text.name")
                 .attr("opacity", nameOpacity(evt.transform.k));
