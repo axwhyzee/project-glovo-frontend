@@ -1,1 +1,0 @@
-install packages, fonts etc in the repo
