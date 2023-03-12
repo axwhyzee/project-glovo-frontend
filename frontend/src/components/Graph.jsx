@@ -136,6 +136,25 @@ function Graph() {
                 .style("visibility", "hidden");
         }
 
+        //DRAG
+        const dragstarted = (d) => {
+            simulation.alphaTarget(0.3).restart();
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        const dragged = (d) => {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        const dragended = (d) => {
+            // alpha min is 0, head there
+            simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
         const renderNode = base => {
             const node = base.append("g")
                 .classed("node", true)
@@ -289,6 +308,12 @@ function Graph() {
             .scaleExtent([0.4, 3])
             .filter(zoomFix)
             .on("zoom", handleZoom);
+        
+        //DRAG FUNCTION
+        const dragg = d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
 
         const simulation = d3
             .forceSimulation(nodes, (d) => d.i)
@@ -298,7 +323,7 @@ function Graph() {
             .force("y", d3.forceY())
             .force("collision", forceCollide)
             .on("tick", ticked);
-
+        
         svg.call(handleHover);
         svg.call(zoom);
     }, [data]);
