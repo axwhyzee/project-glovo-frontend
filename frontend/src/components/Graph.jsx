@@ -310,7 +310,7 @@ function Graph() {
             .on("zoom", handleZoom);
         
         //DRAG FUNCTION
-        const dragg = d3.drag()
+        const drag = d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended);
