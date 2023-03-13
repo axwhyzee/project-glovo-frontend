@@ -19,9 +19,11 @@ class YahooSpiderSpider(scrapy.Spider):
         content=response.css("article p::text").extract()
         content = [re.sub(r'<[^>]*>', '', text) for text in content]
         content = [text.strip() for text in content if text.strip()]
-        yield {
+        if len(content)!=0:
+            yield {
             "url": response.meta.get('url'),
             "title": response.css("article h1::text").get(),
             "date": response.css("article time::attr(datetime)").get(),
             "content": "\n".join(content)
         }
+
