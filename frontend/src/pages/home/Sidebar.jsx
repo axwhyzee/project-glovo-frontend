@@ -1,11 +1,13 @@
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
-import React, { useState, useEffect } from 'react'
-import './home.scss';
+import {Search} from  "@mui/icons-material"
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
-import {Search} from  "@mui/icons-material"
-import {Typography,IconButton, InputBase} from '@mui/material'
+import './home.scss';
 
 function Sidebar() {
     const [toggle, SetToggle] = useState(true);
