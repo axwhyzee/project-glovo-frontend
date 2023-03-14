@@ -294,7 +294,7 @@ function Graph() {
         const handleZoom = (evt) => {
             transform = evt.transform;
             svg.select(".root").attr("transform", evt.transform);
-            node.select("text.name")
+            svg.selectAll("g.node text.name")
                 .attr("opacity", nameOpacity(evt.transform.k));
         };
 
