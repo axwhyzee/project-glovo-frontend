@@ -1,7 +1,0 @@
-# Python cache
-__pycache__/
-
-# Distribution / packaging
-bin/
-build/
-Scripts/
