@@ -3,7 +3,7 @@ import re
 
 
 class ArticlesSpider(scrapy.Spider):
-    name = "Articles"
+    name = "cnbc_spider"
     allowed_domains = ["cnbc.com"]
     start_urls = ["http://cnbc.com/technology/", "http://cnbc.com/business/", "http://cnbc.com/politics/"]
 

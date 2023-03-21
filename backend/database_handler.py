@@ -19,6 +19,9 @@ db = client[DB_NAME]
 
 
 def init_db():
+    '''
+    Init mongodb with hardcoded data. Delete this function in build.
+    '''
     db[COLLECTION_NODES].insert_one({
         'data': 'singapore',
         'freq': 81
@@ -41,63 +44,69 @@ def init_db():
     })
 
 
-'''
-Insert multiple documents
-@param collection Collection name
-@param docs Document object to be inserted
-'''
 def insert_many(collection: str, docs: dict):
+    '''
+    Insert multiple documents
+
+    :param str collection: Collection name
+    :param dict docs: Document object to be inserted
+    '''
     db[collection].insert_many(docs)
 
 
-'''
-Insert a document
-@param collection Collection name
-@param docs Document object to be inserted
-'''
 def insert_one(collection: str, doc: dict):
+    '''
+    Insert a document
+
+    :param str collection: Collection name
+    :param dict docs: Document object to be inserted
+    '''
     db[collection].insert_one(doc)
 
 
-'''
-Update a document
-@param collection Collection name
-@param condition Match condition
-@param target New values to be updated to
-@param upsert If True, update if found, otherwise insert. False by default
-'''
 def update_one(collection: str, condition: dict, target: dict, upsert: bool = False):
-    db[collection].update_one(condition, target, upsert=upsert)
-    
+    '''
+    Update a document
 
-'''
-Get all documents for a specific collection
-@param collection Collection name
-@returns List of documents
-'''
+    :param str collection: Collection name
+    :param dict condition: Match condition
+    :param dict target: New values to be updated to
+    :param bool upsert: If True, update if found, otherwise insert. False by default
+    '''
+    db[collection].update_one(condition, target, upsert=upsert)
+
+
 def find_all(collection: str) -> list:
+    '''
+    Get all documents for a specific collection
+
+    :param str collection: Collection name
+    :return: List of documents
+    '''
     cursor = db[collection].find()
 
     return list(cursor)
 
 
-'''
-Delete multiple documents
-@param collection Collection name
-@param condition Match condition
-@returns Number of documents deleted
-'''
 def delete_many(collection: str, condition) -> int:
+    '''
+    Delete multiple documents
+
+    :param str collection: Collection name
+    :param dict condition: Match condition
+    :return: Number of documents deleted
+    '''
     return db[collection].delete_many(condition).deleted_count
 
 
-'''
-Remove all news documents where publish date is older than specified days old
-Decrement frequency of nodes that were keywords of the news documents deleted
-@param days Lower limit for publish date
-@returns Dict of number of nodes and news documents deleted
-'''
 def clean_up_by_date(days: int) -> dict:
+    '''
+    Remove all news documents where publish date is older than specified days old.
+    Decrement frequency of nodes that were keywords of the news documents deleted.
+
+    :param int days: Lower limit for publish date
+    :return: Object containing number of nodes and news documents deleted
+    '''
     lower_limit = time.time() - days * 24 * 60 * 60
     decrement_keywords = {}
     delete_nodes = []

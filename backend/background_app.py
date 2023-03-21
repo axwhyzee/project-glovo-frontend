@@ -6,14 +6,15 @@ import json
 import os
 from database_handler import *
 
+
 SCRAPER_MAPPINGS = {
     'CNBC': {
         'save_file': 'articles_cnbc.json',
         'spider': 'cnbc_spider'
     },
     'Straits_Times': {
-        'save_file': 'articles_straits.json',
-        'spider': 'straits_spider'
+        'save_file': 'articles_straits_times.json',
+        'spider': 'straits_times_spider'
     },
     'Yahoo': {
         'save_file': 'articles_yahoo.json',
@@ -22,6 +23,8 @@ SCRAPER_MAPPINGS = {
 }
 
 VISITED_URLS_PATH = 'visited_urls.txt'
+SCRAPY_PROJ_PATH = 'webscraper'
+SHA256_SECRET_KEY = 'd8b04a8a85e1cf3e4797366aa8d77769963fdbef167ed9e8cd2cb220f5287629'
 
 
 app = FastAPI()
@@ -33,9 +36,15 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-SHA256_SECRET_KEY = 'd8b04a8a85e1cf3e4797366aa8d77769963fdbef167ed9e8cd2cb220f5287629' # secret_key_0026
 
-def verify_origin(secret):
+def verify_origin(secret: str) -> bool:
+    '''
+    Check if request has the correct API secret key
+
+    :param str secret: Secret key from request
+    :return: True if SHA256 hash of secret corresponds to SHA256_SECRET_KEY, else False
+    :rtype: bool
+    '''
     return SHA256_SECRET_KEY == sha256(secret.encode('utf-8')).hexdigest()
 
 def timestamp_to_epoch(timestamp): # ISO 8601 datestring
@@ -43,43 +52,59 @@ def timestamp_to_epoch(timestamp): # ISO 8601 datestring
 
 @app.get('/')
 def read_root():
-    return {}
+    return
 
 @app.get('/scrape/')
-def start_scrape(secret: str):
-    # run scraper, save scraped data as JSON files
+def start_scrape(secret: str) -> dict:
+    '''
+    Run Scrapy spiders & save scraped data as JSON files.
+    A CRON job will call this endpoint every fixed time interval.
 
+    :param str secret: API secret key. If valid, then scrape, else ignore this GET request
+    :return: Object that states the Scrapy spiders that were executed.
+    :rtype: dict
+    '''
     if not verify_origin(secret):
-        return
+        return 'Invalid secret key'
     
     response = {}
     
+    os.chdir(SCRAPY_PROJ_PATH)
     for scraper in SCRAPER_MAPPINGS:
         scraper_obj = SCRAPER_MAPPINGS[scraper]
         response[scraper] = 'Done'
 
-        # os.system(f'scrapy crawl -o {scraper_obj["save_file"]} -t json {scraper_obj["spider"]}')
+        os.system(f'scrapy crawl -o {scraper_obj["save_file"]} -t json {scraper_obj["spider"]}')
 
     return response
 
 @app.get('/nlp-processing/')
-def nlp_processing():
+def nlp_processing() -> dict:
+    '''
+    Remove outdated data.
+    Read scraped data outputs and conduct keyword extraction, followed by topic modelling and relation extraction.
+    Store node and news data to MongoDB.
+    Update list of visited URLs to prevent repeat work.
+
+    :return: Object that states the scraped data that have been processed.
+    :rtype: dict
+    '''
     response = {}
     news_docs = [] # news documents to be inserted
     nodes_docs = [] # nodes documents to be inserted
     relations = {}
     nodes = {}
 
-    # remove outdated documents
+    # remove outdated documents (7 days or more)
     clean_up_by_date(7)
 
     visited = '\n'.join(list(map(lambda doc:doc['url'], find_all(COLLECTION_NEWS))))
     
+    # read scraped data from each of the Scrapy spiders
     for scraper in SCRAPER_MAPPINGS:
         filepath = SCRAPER_MAPPINGS[scraper]['save_file']
         response[scraper] = 'Done'
 
-        # read scraped data
         with open(filepath, 'r') as f:
             data = json.load(f) # read & parse JSON file data
 

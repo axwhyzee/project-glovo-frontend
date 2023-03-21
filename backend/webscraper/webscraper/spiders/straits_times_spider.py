@@ -2,8 +2,8 @@ import scrapy
 import re
 
 
-class StraitsSpiderSpider(scrapy.Spider):
-    name = "straits_spider"
+class StraitsTimesSpiderSpider(scrapy.Spider):
+    name = "straits_times_spider"
     allowed_domains = ["straitstimes.com"]
     start_urls = ["http://straitstimes.com/breaking-news"]
     user_agent = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'}
