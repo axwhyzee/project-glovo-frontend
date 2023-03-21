@@ -137,15 +137,15 @@ function Graph() {
         }
 
         //DRAG
-        const dragstarted = (d) => {
+        const dragstarted = (event, d) => {
             simulation.alphaTarget(0.3).restart();
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
+            d.fx = event.x;
+            d.fy = event.y;
         }
 
-        const dragged = (d) => {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
+        const dragged = (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
         }
 
         const dragended = (d) => {
