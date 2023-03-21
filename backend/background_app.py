@@ -63,7 +63,7 @@ def read_root():
 @app.get('/scrape/')
 def start_scrape(secret: str) -> dict:
     '''
-    Run Scrapy spiders & save scraped data as JSON files.
+    Run Scrapy spiders & save scraped data as JSON files in {SCRAPY_PROJ_PATH}/{SCRAPY_PROJ_PATH}
     A CRON job will call this endpoint every fixed time interval.
 
     :param str secret: API secret key. If valid, then scrape, else ignore this GET request
@@ -74,14 +74,15 @@ def start_scrape(secret: str) -> dict:
         return 'Invalid secret key'
     
     response = {}
-    
+    print(os.getcwd())
     os.chdir(SCRAPY_PROJ_PATH)
     for scraper in SCRAPER_MAPPINGS:
         scraper_obj = SCRAPER_MAPPINGS[scraper]
         response[scraper] = 'Done'
 
         os.system(f'scrapy crawl -o {scraper_obj["save_file"]} -t json {scraper_obj["spider"]}')
-
+    os.chdir('../')
+    print(os.getcwd())
     return response
 
 @app.get('/nlp-processing/')

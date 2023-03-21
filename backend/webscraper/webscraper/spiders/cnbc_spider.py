@@ -7,10 +7,15 @@ class ArticlesSpider(scrapy.Spider):
     allowed_domains = ["cnbc.com"]
     start_urls = ["http://cnbc.com/technology/", "http://cnbc.com/business/", "http://cnbc.com/politics/"]
 
+    def __init__(self):
+        with open('../visited_urls.txt', 'r') as f:
+            self.visited = f.read().strip().split('\n')
+
     def parse(self, response):
         article_links = response.css("div.Card-titleContainer a::attr(href)").getall()
         for link in article_links:
-            yield scrapy.Request(link, callback= self.parse_articles, meta={'url': link})
+            if link not in self.visited:
+                yield scrapy.Request(link, callback= self.parse_articles, meta={'url': link})
 
     def parse_articles(self,response):
         content=response.css("div.group p::text").extract()
