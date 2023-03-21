@@ -47,7 +47,13 @@ def verify_origin(secret: str) -> bool:
     '''
     return SHA256_SECRET_KEY == sha256(secret.encode('utf-8')).hexdigest()
 
-def timestamp_to_epoch(timestamp): # ISO 8601 datestring
+def timestamp_to_epoch(timestamp) -> int:
+    '''
+    ISO 8601 datestring to unix timestamp
+    :param str timestamp: ISO 8601 datestring
+    :return: Unix timestamp
+    :rtype: int
+    '''
     return int(parser.parse(timestamp).timestamp())
 
 @app.get('/')
@@ -92,7 +98,9 @@ def nlp_processing() -> dict:
     response = {}
     news_docs = [] # news documents to be inserted
     nodes_docs = [] # nodes documents to be inserted
-    relations = {}
+    relations = []
+    keywords = []
+    topics = []
     nodes = {}
 
     # remove outdated documents (7 days or more)
@@ -118,8 +126,6 @@ def nlp_processing() -> dict:
                 visited += article_obj['URL'] + '\n'
 
                 # keyword extraction
-                keywords = []
-                
                 for i, kw in enumerate(keywords):
                     if kw in nodes:
                         nodes[kw] += 1
@@ -129,14 +135,12 @@ def nlp_processing() -> dict:
                     doc[f'key{i+1}'] = kw
 
                 # topic modelling
-                topics = []
                 for i, topic in enumerate(topics):
                     doc[f'topic{i+1}'] = topic
 
                 news_docs.append(doc)
 
                 # relation extraction
-                relations = []
                 for relation in relations:
                     pass
 
