@@ -4,14 +4,14 @@ import Graph from '../../components/Graph';
 import Search from '../../components/Search';
 import Zoom from '../../components/Zoom';
 import Navbar from '../../components/Navbar';
-function Home() {
+function Home({ graphData }) {
   return (
     <div className='home'>
       <Navbar />
       <Sidebar />
       <Search />
       <Zoom />
-      <Graph />
+      <Graph data={graphData} />
     </div>
   )
 }
