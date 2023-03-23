@@ -36,7 +36,7 @@ const _fetchGraph = async (assignNodeId, assignEdgeId) => {
 }
 
 const DUMMY_GRAPH = () => {
-    const nodes = [
+    const letters = [
         { i: 0, upper: "Α", lower: "α", name: "Alpha", en: "a" },
         { i: 1, upper: "Β", lower: "β", name: "Beta", en: "b" },
         { i: 2, upper: "Γ", lower: "γ", name: "Gamma", en: "g" },
@@ -63,7 +63,15 @@ const DUMMY_GRAPH = () => {
         { i: 23, upper: "Ω", lower: "ω", name: "Omega", en: "o" }
     ];
 
-    const edges = ((nodes, n = Math.trunc(nodes.length * 1.5)) => {
+    const nodes = ((seed, n = 60) => {
+        const d = new Set();
+        while (d.size < n) {
+            d.add(_.sampleSize(seed, 2).map(p => p.name).join('-'));
+        }
+        return Array.from(d, (str, i) => ({i, name: str}));
+    })(letters);
+
+    const edges = ((nodes, n = Math.trunc(nodes.length * 1.2)) => {
         const sampleSpace = Array.from(
             { length: nodes.length - 1 },
             (_, i) => nodes.length - i - 1
