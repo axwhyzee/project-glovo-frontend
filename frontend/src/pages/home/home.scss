@@ -112,15 +112,6 @@ line:hover {
     padding: 10px;
 }
 
-.search {
-    position: absolute;
-    top: 0.8em; 
-    left: calc(50% - 12rem); 
-    width: 24rem;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1.6em;
-}
-
 .zoom-controls {
     position: absolute;
     bottom: 0.8em;
@@ -145,4 +136,28 @@ line:hover {
 .zoom-controls button:last-child {
     border-top-right-radius: 0.4em;
     border-bottom-right-radius: 0.4em;
+}
+
+.graph-query {
+    width: 20em;
+    background: white;
+    position: absolute;
+    top: 100px;
+    right: 0;
+    border: 1px solid black;
+    padding: 20px;
+    z-index: 98;
+}
+
+.graph-query ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.graph-query .indicator {
+    border-radius: 50%;
+    width: 1em;
+    aspect-ratio: 1;
+    margin-right: 0.8em;
 }
