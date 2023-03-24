@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import _ from "lodash";
+import { getEdges } from '../features/graphService';
 
 const _mkCounter = function*() {
     let i = 0;
@@ -29,11 +30,9 @@ const _transform = (apiEdges, assignNodeId, assignEdgeId) => {
 };
 
 const _fetchGraph = async (assignNodeId, assignEdgeId) => {
-    const data = await fetch(
-        "https://project-glovo-api.onrender.com/edges/?n=100"
-    ).then((r) => r.json());
+    const data = await getEdges();
     return _transform(data, assignNodeId, assignEdgeId);
-}
+};
 
 const DUMMY_GRAPH = () => {
     const letters = [

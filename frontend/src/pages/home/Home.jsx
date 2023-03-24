@@ -16,7 +16,7 @@ function Home({ graphData }) {
       <Sidebar />
       <Panel data={queries} update={setQueries} />
       <Zoom />
-      <Graph offline={true} data={graphData} highlight={resolved} />
+      <Graph data={graphData} highlight={resolved} />
       <Resolver data={graphData} queries={queries} update={setResolved}/>
     </div>
   )
