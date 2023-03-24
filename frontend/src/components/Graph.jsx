@@ -122,6 +122,7 @@ function enableHover() {
 
 function setupTicked() {
     this.svg.selectAll("g.node").attr("transform", (d) => `translate(${d.x}, ${d.y})`);
+    this.svg.selectAll(".highlight").attr("transform", (d) => `translate(${d.ref.x}, ${d.ref.y})`);
 
     this.link
         .attr("x1", (d) => d.source.x)
@@ -211,7 +212,30 @@ function enableDrag() {
         .on("end", dragended);
 }
 
-function Graph({ data, queries = {}, settings = {} }) {
+function enableHighlight() {
+    const highlight = _.map(this.data.highlight, (h) => {
+        return { ...h, ref: _.find(this.data.nodes, (q) => q.i === h.i) };
+    })
+    
+    const node = this.svg
+        .select(".root")
+        .selectAll(".highlight")
+        .data(highlight, (d) => d.i)
+        .join(
+            enter => {
+                enter.append("circle")
+                    .classed("point", true)
+                    .classed("highlight", true)
+                    .attr("key", (d) => d.i)
+                    .attr("fill", d => d.color)
+            },
+            update => update,
+            exit => exit.remove()
+        );
+
+};
+
+function Graph({ data, highlight = [], settings = {} }) {
     const { width, height } = useWindowSize();
 
     const ctx = {}
@@ -220,6 +244,7 @@ function Graph({ data, queries = {}, settings = {} }) {
         // Shared state
         ctx.svg = svg;
         ctx.data = data;
+        ctx.data.highlight = highlight;
         ctx.width = width;
         ctx.height = height;
         ctx.linkOpacity = d3.scaleLog().domain([1, d3.max(ctx.data.edges, (d) => d.w)]).range([0.1, 0.25]);
@@ -243,6 +268,7 @@ function Graph({ data, queries = {}, settings = {} }) {
         enableHover.bind(ctx)();
         enableZoom.bind(ctx)();
         enableDrag.bind(ctx)();
+        enableHighlight.bind(ctx)();
 
         // Construct the forces.
         const forceNode = d3.forceManyBody().strength(-300);
@@ -258,7 +284,7 @@ function Graph({ data, queries = {}, settings = {} }) {
             .force("collision", forceCollide)
             .on("tick", setupTicked.bind(ctx));
 
-    }, [data]);
+    }, [data, highlight]);
 
     return (
         <svg

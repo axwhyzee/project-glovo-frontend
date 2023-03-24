@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
@@ -38,23 +38,37 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         width: '100%',
         [theme.breakpoints.up('sm')]: {
             width: '28ch',
-            '&:focus': {
-                width: '36ch',
-            },
+            // '&:focus': {
+            //     width: '36ch',
+            // },
         },
     },
 }));
 
-function SearchBox() {
-    return (<Search>
-        <SearchIconWrapper>
-            <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-            placeholder="Search… (Ctrl+/)"
-            inputProps={{ 'aria-label': 'search' }}
-        />
-    </Search>)
+function SearchBox({ update }) {
+    const [value, setValue] = useState("");
+    const onSubmit = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            update(value);
+            setValue("");
+        }
+    }
+    return (
+        <Search>
+            <SearchIconWrapper>
+                <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+                name="Query"
+                autoComplete="off"
+                value={value}
+                onChange={e => setValue(e.target.value)}
+                onKeyDown={onSubmit}
+                placeholder="Search… (Ctrl+/)"
+                inputProps={{ 'aria-label': 'search' }}
+            />
+        </Search>)
 }
 
 export default SearchBox;

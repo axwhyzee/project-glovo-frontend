@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import _ from "lodash";
 
 const _mkCounter = function*() {
@@ -91,12 +91,13 @@ const DUMMY_GRAPH = () => {
 function DataLoader({ offline = false, setGraphData }) {
     const [nodeCounter, ] = useState(_mkCounter());
     const [edgeCounter, ] = useState(_mkCounter());
+    const dummy = useMemo(DUMMY_GRAPH, []);
 
     useEffect(() => {
         const assignNodeId = () => nodeCounter.next().value;
         const assignEdgeId = () => edgeCounter.next().value;
-        if (!offline) _fetchGraph(assignNodeId, assignEdgeId).then(p => setGraphData(p));
-        else setGraphData(DUMMY_GRAPH());
+        if (!offline) _fetchGraph(assignNodeId, assignEdgeId).then(p => setGraphData(p)).catch(() => setGraphData(dummy));
+        else setGraphData(dummy);
     }, [offline, nodeCounter, edgeCounter, setGraphData]);
 
     return null;

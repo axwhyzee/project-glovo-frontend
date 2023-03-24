@@ -2,7 +2,7 @@ import React from 'react'
 import { AppBar, Toolbar, IconButton, Typography, Stack, Button } from '@mui/material'
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import { useNavigate } from 'react-router-dom';
-import Search from './Search';
+
 function Navbar() {
     const navigate = useNavigate()
     return (
@@ -17,7 +17,6 @@ function Navbar() {
                 <Stack direction="row" spacing={1}>
                     <Button color='inherit' onClick={() => navigate("/about")} >About us</Button>
                 </Stack>
-                <Search />
             </Toolbar>
         </AppBar>
     )

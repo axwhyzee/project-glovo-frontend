@@ -90,6 +90,9 @@ body {
 
 .network-graph-style-1 g.node .point {
     fill: #607774;
+}
+
+.network-graph-style-1 .point {
     stroke: #666666;
     stroke-width: 1;
     r: 5;
@@ -139,25 +142,31 @@ line:hover {
 }
 
 .graph-query {
-    width: 20em;
     background: white;
     position: absolute;
     top: 100px;
-    right: 0;
-    border: 1px solid black;
-    padding: 20px;
+    right: 20px;
+    border: 1px solid lightgrey;
     z-index: 98;
+    padding: 0.4em 0 0.8em;
+    border-radius: 0.4em;
 }
 
 .graph-query ul {
     list-style-type: none;
     margin: 0;
-    padding: 0;
+    width: 20em;
 }
 
 .graph-query .indicator {
     border-radius: 50%;
-    width: 1em;
+    width: 2ch;
     aspect-ratio: 1;
-    margin-right: 0.8em;
+    border: 1px solid lightgrey;
+}
+
+.graph-query ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
 }

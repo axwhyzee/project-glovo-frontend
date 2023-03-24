@@ -16,7 +16,7 @@ function App() {
           <Route path="/test" element={<Test />}></Route>
         </Routes>
       </BrowserRouter>
-      <DataLoader offline={true} setGraphData={setGraphData} />
+      <DataLoader setGraphData={setGraphData} />
     </div>
   );
 }
