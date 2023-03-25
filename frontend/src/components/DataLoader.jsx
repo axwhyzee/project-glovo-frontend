@@ -61,8 +61,8 @@ const DUMMY_GRAPH = () => {
         { i: 22, upper: "Ψ", lower: "ψ", name: "Psi", en: "ps" },
         { i: 23, upper: "Ω", lower: "ω", name: "Omega", en: "o" }
     ];
-
-    const nodes = ((seed, n = 60) => {
+    // 24*24 = 400+
+    const nodes = ((seed, n = 400) => {
         const d = new Set();
         while (d.size < n) {
             d.add(_.sampleSize(seed, 2).map(p => p.name).join('-'));
@@ -70,7 +70,7 @@ const DUMMY_GRAPH = () => {
         return Array.from(d, (str, i) => ({i, name: str}));
     })(letters);
 
-    const edges = ((nodes, n = Math.trunc(nodes.length * 1.2)) => {
+    const edges = ((nodes, n = Math.trunc(nodes.length * 0.7)) => {
         const sampleSpace = Array.from(
             { length: nodes.length - 1 },
             (_, i) => nodes.length - i - 1
@@ -97,7 +97,7 @@ function DataLoader({ offline = false, setGraphData }) {
         const assignEdgeId = () => edgeCounter.next().value;
         if (!offline) _fetchGraph(assignNodeId, assignEdgeId).then(p => setGraphData(p)).catch(() => setGraphData(dummy));
         else setGraphData(dummy);
-    }, [offline, nodeCounter, edgeCounter, setGraphData]);
+    }, [offline, nodeCounter, edgeCounter, setGraphData, dummy]);
 
     return null;
 }

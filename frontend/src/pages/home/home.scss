@@ -98,6 +98,11 @@ body {
     r: 5;
 }
 
+.network-graph-style-1 .highlight.point {
+    pointer-events: none;
+}
+
+
 .network-graph-style-1 g.node:hover,
 line:hover {
     cursor: pointer;
@@ -169,4 +174,9 @@ line:hover {
     display: flex;
     align-items: center;
     gap: 0.4em;
+    cursor: pointer;
+}
+
+.graph-query ul li:hover {
+    background-color: lightgrey;
 }
