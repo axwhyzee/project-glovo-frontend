@@ -18,7 +18,8 @@ function Query({ query, color }) {
 
 function Panel({ data = [], update }) {
     const append = (v) => {
-        const q = v.toLowerCase()
+        const q = v.trim().toLowerCase();
+        if (q.length === 0) return;
         const s = new Set(data.map(p => p.query));
         if (!s.has(q)) update([...data, { query: q, color: colorizer(q) }]);
     };
