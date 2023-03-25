@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@700&display=swap');
+
 * {
     box-sizing: border-box;
 }
 
 
 body {
-    background-color: #749793dd;
+    background-color: #2F455C;
     margin: 0;
     padding: 0;
 }
@@ -77,7 +79,7 @@ body {
 
 .network-graph-style-1 line.edge {
     stroke-width: 1;
-    stroke: black;
+    stroke: white; //edge color
 }
 
 .network-graph-style-1 g.node .lower {
@@ -85,17 +87,18 @@ body {
 }
 
 .network-graph-style-1 g.node .name {
-    font-size: 0.7rem;
+    font-family: 'Noto Sans Mono', monospace;
+    font-size: 0.6rem;
 }
 
 .network-graph-style-1 g.node .point {
-    fill: #607774;
+    fill: #21D0B2; //34F5C5
 }
 
 .network-graph-style-1 .point {
-    stroke: #666666;
+    stroke: lightgrey; //node border
     stroke-width: 1;
-    r: 5;
+    r: 6; // radius of the node
 }
 
 .network-graph-style-1 .highlight.point {
@@ -109,15 +112,16 @@ line:hover {
 }
 
 .tooltip {
-    background-color: #A4B8B6ee;
+    background-color: lightgrey;
     font-weight: bold;
     position: absolute;
     /* the absolute position is necessary so that we can manually define its position later */
     visibility: hidden;
     /* hide it from default at the start so it only appears on hover */
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 5px;
     padding: 10px;
+    color: black; // text color
 }
 
 .zoom-controls {

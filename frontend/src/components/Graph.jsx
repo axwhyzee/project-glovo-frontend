@@ -24,6 +24,7 @@ const renderNode = svg => {
     const name = node
         .append("text")
         .classed("name", true)
+        .style("fill", "white") // text color 
         .attr("dy", 15)
         .text((d) => d.name);
 };
