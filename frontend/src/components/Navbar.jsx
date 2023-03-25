@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Navbar() {
     const navigate = useNavigate()
     return (
-        <AppBar position='static' style={{ background: '#2E3B55' }} >
+        <AppBar position='static' style={{ background: '#83B8FF' }} >
             <Toolbar >
                 <IconButton size='large' edge="start" color='inherit' aria-label='logo' onClick={() => navigate("/")}>
                     <AnalyticsIcon></AnalyticsIcon>
