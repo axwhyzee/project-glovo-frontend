@@ -22,7 +22,7 @@ const _transform = (apiEdges, assignNodeId, assignEdgeId) => {
         .map((e, i) => {
             const s = association[e.src];
             const t = association[e.dst];
-            const w = e.k[0];
+            const w = e.weight;
             return { i: assignEdgeId(), s, t, w, source: s, target: t };
         })
         .value();

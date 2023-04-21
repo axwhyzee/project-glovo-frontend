@@ -91,7 +91,7 @@ function Sidebar(toggleGlobal) {
                     <IndivPost 
                         date={new Date(`${item.date}`).toLocaleDateString()} 
                         description = {item.description}
-                        keywords = {item.keywords}
+                        keywords = {item.keys}
                         id = {item._id}
                         publisher = {item.publisher}
                         title = {item.title}
