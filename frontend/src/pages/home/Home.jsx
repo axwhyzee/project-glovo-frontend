@@ -9,12 +9,13 @@ import Resolver from '../../components/graph/Resolver';
 function Home({ graphData }) {
   const [queries, setQueries] = useState(dummy);
   const [resolved, setResolved] = useState([]);
+  const [toggleGlobal, setToggleGlobal] = useState(true);
 
   return (
     <div className='home'>
       <Navbar />
-      <Sidebar />
-      <Panel data={queries} update={setQueries} />
+      <Sidebar toggleGlobal={toggleGlobal}/>
+      <Panel data={queries} update={setQueries}  toggleGlobal={toggleGlobal}/>
       <Zoom />
       <Graph data={graphData} highlight={resolved} />
       <Resolver data={graphData} queries={queries} update={setResolved}/>

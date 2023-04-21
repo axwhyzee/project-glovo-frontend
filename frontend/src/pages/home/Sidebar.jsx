@@ -8,9 +8,11 @@ import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
+//this is the root URL
+const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
 
-function Sidebar() {
-    const [toggle, SetToggle] = useState(true);
+function Sidebar(toggleGlobal) {
+    const [toggle, SetToggle] = useState(toggleGlobal);
     const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
 
@@ -19,10 +21,8 @@ function Sidebar() {
     //this will return some promise data
         getAllPosts()
         console.log(posts)
-    }, [])
+    }, [posts])
 
-    //this is the root URL
-    const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
     
     //Get all posts
     const getAllPosts = async () => {
@@ -32,6 +32,7 @@ function Sidebar() {
         const data = await response.json();
         setPosts(data);
       };
+
     const handleChange = (e) => {
         e.preventDefault();
         setSearchInput(e.target.value);
@@ -54,7 +55,8 @@ function Sidebar() {
             </button>
 
 
-            <Box 
+            {toggle ? 
+                <Box 
                 display="flex" 
                 flexDirection={'column'} 
                 padding ={2} 
@@ -94,10 +96,10 @@ function Sidebar() {
                         publisher = {item.publisher}
                         title = {item.title}
                         key={index} 
-                        url = {item.url}
+                        url = {item.URL}
                     /> 
                 ))}
-            </Box>
+            </Box> : ""}
         </section>
     )
 }
