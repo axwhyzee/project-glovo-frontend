@@ -21,7 +21,7 @@ function IndivPost({title, url, publisher, keywords, date, id}) {
   return (
       <Grid container spacing={1} >
         
-          <Card sx={{display: 'flex', maxWidth: 500}}>
+          <Card sx={{display: 'flex', maxWidth: 525}}>
           <CardMedia
               component="img"
               sx={{ width: 100 }}
@@ -41,10 +41,8 @@ function IndivPost({title, url, publisher, keywords, date, id}) {
                   Top Three Keywords:
                 </Typography>
                 {keywords.slice(0, 3).map((element, index) => (
-                  <Chip key={index} label={element} variant="outlined" sx={{ marginRight: '8px' }}/> 
+                  <Chip key={index} label={element} variant="outlined" sx={{ marginRight: '8px', marginTop: '8px'}}/> 
                 ))}
-
-                  
               </CardContent>
           </CardActionArea>
         </Card>

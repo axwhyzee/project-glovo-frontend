@@ -15,6 +15,8 @@ function Sidebar(toggleGlobal) {
     const [toggle, SetToggle] = useState(toggleGlobal);
     const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     // we only need to render this once, so the dependency array is empty
     useEffect(() => {
@@ -47,6 +49,18 @@ function Sidebar(toggleGlobal) {
     if(!posts){
         return null
     }
+
+    //for the pagination (From chatGPT)
+    const itemsPerPage  = 10;
+    const totalItems = posts.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    function handleClickPagination(pageNumber) {
+        setCurrentPage(pageNumber);
+      }
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const itemsToShow = posts.slice(startIndex, endIndex);
 
     return (
         <section className={'sidebar' + (toggle ? ' expanded' : '')}>
@@ -86,8 +100,8 @@ function Sidebar(toggleGlobal) {
                 </Box>
 
             
-                {posts && 
-                    posts.map((item, index) => (
+                {itemsToShow && 
+                    itemsToShow.map((item, index) => (
                     <IndivPost 
                         date={new Date(`${item.date}`).toLocaleDateString()} 
                         description = {item.description}
@@ -99,6 +113,17 @@ function Sidebar(toggleGlobal) {
                         url = {item.URL}
                     /> 
                 ))}
+                <div className="pagination-container">
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => handleClickPagination(index + 1)}
+                        disabled={currentPage === index + 1}
+                    >
+                        {index + 1}
+                    </button>
+                    ))}
+                </div>
             </Box> : ""}
         </section>
     )
