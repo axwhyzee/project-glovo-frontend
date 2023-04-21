@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
+import Chip from '@mui/material/Chip';
+
 import Box from '@mui/material/Box'
 /**
  * title
@@ -32,8 +34,17 @@ function IndivPost({title, url, publisher, keywords, date, id}) {
                   {title.length > 50 ? title.substring(0,50) + "...": title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {publisher}
+                  Publisher: {publisher}
                 </Typography>
+                <p></p>
+                <Typography variant="body2" color="text.primary">
+                  Top Three Keywords:
+                </Typography>
+                {keywords.slice(0, 3).map((element, index) => (
+                  <Chip key={index} label={element} variant="outlined" sx={{ marginRight: '8px' }}/> 
+                ))}
+
+                  
               </CardContent>
           </CardActionArea>
         </Card>
