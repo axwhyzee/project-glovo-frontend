@@ -11,8 +11,7 @@ import './home.scss';
 //this is the root URL
 const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
 
-function Sidebar(toggleGlobal) {
-    const [toggle, SetToggle] = useState(toggleGlobal);
+function Sidebar({toggleGlobal, toggleCallback}) {
     const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,9 +20,8 @@ function Sidebar(toggleGlobal) {
     // we only need to render this once, so the dependency array is empty
     useEffect(() => {
     //this will return some promise data
-        getAllPosts()
-        console.log(posts)
-    }, [posts])
+        getAllPosts();
+    }, [])
 
     
     //Get all posts
@@ -33,7 +31,7 @@ function Sidebar(toggleGlobal) {
         });
         const data = await response.json();
         setPosts(data);
-      };
+    };
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -63,25 +61,21 @@ function Sidebar(toggleGlobal) {
     const itemsToShow = posts.slice(startIndex, endIndex);
 
     return (
-        <section className={'sidebar' + (toggle ? ' expanded' : '')}>
-            <button className='toggle-sidebar' type='button' onClick={() => { SetToggle(!toggle) }}>
-                <FontAwesomeIcon icon={toggle ? faCaretRight : faCaretLeft} />
+        <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
+            <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>
+                <FontAwesomeIcon icon={toggleGlobal ? faCaretRight : faCaretLeft} />
             </button>
 
-
-            {toggle ? 
-                <Box 
-                display="flex" 
-                flexDirection={'column'} 
-                padding ={2} 
-                justifyContent="center" 
-                alignItems={"center"}
-                gap = {2}
-                > 
+            
+            {toggleGlobal ? 
+                <>
                 <Box
+                    width="100%"
                     borderRadius="9px"
                     gap="3rem"
                     padding="0.1rem 1.5rem"
+                    position="absolute"
+                    top="20px"
                 >
                     <InputBase placeholder="Search..."
                         sx={{
@@ -98,33 +92,47 @@ function Sidebar(toggleGlobal) {
                         <Search />
                     </IconButton>
                 </Box>
-
-            
-                {itemsToShow && 
-                    itemsToShow.map((item, index) => (
-                    <IndivPost 
-                        date={new Date(`${item.date}`).toLocaleDateString()} 
-                        description = {item.description}
-                        keywords = {item.keys}
-                        id = {item._id}
-                        publisher = {item.publisher}
-                        title = {item.title}
-                        key={index} 
-                        url = {item.URL}
-                    /> 
-                ))}
-                <div className="pagination-container">
-                    {Array.from({ length: totalPages }).map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleClickPagination(index + 1)}
-                        disabled={currentPage === index + 1}
-                    >
-                        {index + 1}
-                    </button>
+                <div className='sidebar-content'>
+                    <Box 
+                    display="flex" 
+                    flexDirection={'column'} 
+                    paddingLeft={2}
+                    paddingRight={2}
+                    justifyContent="center" 
+                    alignItems={"center"}
+                    gap = {2}
+                    > 
+                    {itemsToShow && 
+                        itemsToShow.map((item, index) => (
+                        <IndivPost 
+                            date={new Date(`${item.date}`).toLocaleDateString()} 
+                            description = {item.description}
+                            keywords = {item.keys}
+                            id = {item._id}
+                            publisher = {item.publisher}
+                            title = {item.title}
+                            key={index} 
+                            url = {item.URL}
+                        /> 
                     ))}
+                    <div className="pagination-container">
+                        {Array.from({ length: totalPages }).map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleClickPagination(index + 1)}
+                            disabled={currentPage === index + 1}
+                        >
+                            {index + 1}
+                        </button>
+                        ))}
+                    </div>
+                    </Box> 
                 </div>
-            </Box> : ""}
+            </>
+            : (
+                <></>
+            )}
+            
         </section>
     )
 }

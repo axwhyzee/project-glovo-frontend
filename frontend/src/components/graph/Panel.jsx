@@ -28,7 +28,7 @@ function Panel({ data = [], update, toggleGlobal }) {
 
     return (
         
-        <section className="graph-query">
+        <section className={"graph-query" + (toggleGlobal ? " graph-query-pushed" : "")}>
             
             <SearchBox update={append} />
             <ul>
