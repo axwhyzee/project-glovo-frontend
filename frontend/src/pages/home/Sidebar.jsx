@@ -8,6 +8,7 @@ import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
+import SearchBox from '../../components/graph/Search';
 //this is the root URL
 const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
 
@@ -69,29 +70,7 @@ function Sidebar({toggleGlobal, toggleCallback}) {
             
             {toggleGlobal ? 
                 <>
-                <Box
-                    width="100%"
-                    borderRadius="9px"
-                    gap="3rem"
-                    padding="0.1rem 1.5rem"
-                    position="absolute"
-                    top="20px"
-                >
-                    <InputBase placeholder="Search..."
-                        sx={{
-                        backgroundColor: "white",
-                        borderRadius: "4rem",
-                        padding: "auto",
-                        margin: "auto"
-                        }}
-                        type="text"
-                        onChange={handleChange}
-                        value={searchInput}
-                    />
-                    <IconButton >
-                        <Search />
-                    </IconButton>
-                </Box>
+                <SearchBox/>
                 <div className='sidebar-content'>
                     <Box 
                     display="flex" 
@@ -112,7 +91,7 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                             publisher = {item.publisher}
                             title = {item.title}
                             key={index} 
-                            url = {item.URL}
+                            url = {item.url}
                         /> 
                     ))}
                     <div className="pagination-container">
