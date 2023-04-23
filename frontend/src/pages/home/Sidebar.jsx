@@ -36,24 +36,14 @@ function Sidebar({toggleGlobal, toggleCallback}) {
     // function handleClickPagination(pageNumber) {
     //     setCurrentPage(pageNumber);
     //   }
-    async function fetchData() {
-        try {
-          const response = await axios.get(API_ENDPOINT, {
-            params: request_body,
-          });
-          const data = response.data;
-          setPosts(data)
-          // Handle the response data
-        } catch (error) {
-          // Handle the error
-        }
-      }
     // const startIndex = (currentPage - 1) * itemsPerPage;
     // const endIndex = startIndex + itemsPerPage;
     // const itemsToShow = posts.slice(startIndex, endIndex);
+    
     const getAllPosts = async () => {
         try {
-          const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
+          //const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
+          const response = await fetch(`${API_ENDPOINT}`);
           const data = await response.json();
           setPosts(data);
         } catch (error) {
@@ -63,26 +53,14 @@ function Sidebar({toggleGlobal, toggleCallback}) {
     // we only need to render this once, so the dependency array is empty
     useEffect(() => {
         //this will return some promise data
-        // getAllPosts();
-        fetchData();
+        getAllPosts();
     }, [])
-    // const getAllPosts = async () => {
-    //     const response = await fetch(API_URL, {
-    //         method: "POST",
-    //         body: JSON.stringify({
-    //             key: 'ai', 
-    //             page: 1
-    //           })
-    //     });
-    //     const data = await response.json();
-    //     setPosts(data)
-    // };
-
+    console.log(posts)
     //mount the thing
     if(!posts){
         return null
     }
-    console.log(posts)
+
     return (
         <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
             <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>
@@ -124,9 +102,8 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                     alignItems={"center"}
                     gap = {2}
                     > 
-                        {}
-                        {/* {posts && searchInput.length === 0 &&
-                            posts.map((item, index) => (
+                        {posts.articles && searchInput.length === 0 &&
+                            posts.articles.map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
                                 description = {item.description}
@@ -137,9 +114,9 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                                 key={index} 
                                 url = {item.url}
                             /> 
-                        ))} */}
-                        {/* {posts && searchInput.length > 0 &&
-                            posts.filter(item => item.keys.some(value => value.includes(searchInput))).map((item, index) => (
+                        ))}
+                        {posts.articles && searchInput.length > 0 &&
+                            posts.articles.filter(item => item.keys.some(value => value.includes(searchInput))).map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
                                 description = {item.description}
@@ -150,7 +127,7 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                                 key={index} 
                                 url = {item.url}
                             /> 
-                        ))} */}
+                        ))}
                         {/* <div className="pagination-container">
                             {Array.from({ length: totalPages }).map((_, index) => (
                             <button
