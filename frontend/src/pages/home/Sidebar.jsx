@@ -13,53 +13,42 @@ import SearchBox from '../../components/graph/Search';
 const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
 
 function Sidebar({toggleGlobal, toggleCallback}) {
+    //define the useState
     const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-
-
     // we only need to render this once, so the dependency array is empty
     useEffect(() => {
-    //this will return some promise data
+        //this will return some promise data
         getAllPosts();
     }, [])
+    //for the pagination (From chatGPT)
+    // const itemsPerPage  = 10;
+    // const totalItems = posts.length;
+    // const totalPages = Math.ceil(totalItems / itemsPerPage);
+    // function handleClickPagination(pageNumber) {
+    //     setCurrentPage(pageNumber);
+    //   }
 
-    
+    // const startIndex = (currentPage - 1) * itemsPerPage;
+    // const endIndex = startIndex + itemsPerPage;
+    // const itemsToShow = posts.slice(startIndex, endIndex);
+
+    console.log(searchInput)
     //Get all posts
     const getAllPosts = async () => {
         const response = await fetch(API_URL, {
-          method: "GET",
+            method: "GET",
         });
         const data = await response.json();
         setPosts(data);
     };
 
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-            if (searchInput.length > 0) {
-                posts.filter((post) => {
-                return post.publisher.match(searchInput);
-            });
-        };
-    }
-    
+
     //mount the thing
     if(!posts){
         return null
     }
-
-    //for the pagination (From chatGPT)
-    const itemsPerPage  = 10;
-    const totalItems = posts.length;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    function handleClickPagination(pageNumber) {
-        setCurrentPage(pageNumber);
-      }
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const itemsToShow = posts.slice(startIndex, endIndex);
 
     return (
         <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
@@ -70,7 +59,28 @@ function Sidebar({toggleGlobal, toggleCallback}) {
             
             {toggleGlobal ? 
                 <>
-                <SearchBox/>
+                <Box
+                    width="100%"
+                    gap="3rem"
+                    padding="2px 20px"
+                    position="absolute"
+                    top="10px"
+                    margin='0px 30px'
+                >
+                    <InputBase placeholder="Search..."
+                        sx={{
+                        backgroundColor: "white",
+                        padding: "2px 2px",
+                        margin: "auto"
+                        }}
+                        type="text"
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        value={searchInput}
+                    >
+                    </InputBase>
+
+                </Box>
+
                 <div className='sidebar-content'>
                     <Box 
                     display="flex" 
@@ -81,30 +91,43 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                     alignItems={"center"}
                     gap = {2}
                     > 
-                    {itemsToShow && 
-                        itemsToShow.map((item, index) => (
-                        <IndivPost 
-                            date={new Date(`${item.date}`).toLocaleDateString()} 
-                            description = {item.description}
-                            keywords = {item.keys}
-                            id = {item._id}
-                            publisher = {item.publisher}
-                            title = {item.title}
-                            key={index} 
-                            url = {item.url}
-                        /> 
-                    ))}
-                    <div className="pagination-container">
-                        {Array.from({ length: totalPages }).map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => handleClickPagination(index + 1)}
-                            disabled={currentPage === index + 1}
-                        >
-                            {index + 1}
-                        </button>
+                        {posts && searchInput.length === 0 &&
+                            posts.map((item, index) => (
+                            <IndivPost 
+                                date={new Date(`${item.date}`).toLocaleDateString()} 
+                                description = {item.description}
+                                keywords = {item.keys}
+                                id = {item._id}
+                                publisher = {item.publisher}
+                                title = {item.title}
+                                key={index} 
+                                url = {item.url}
+                            /> 
                         ))}
-                    </div>
+                        {posts && searchInput.length > 0 &&
+                            posts.filter(item => item.keys.some(value => value.includes(searchInput))).map((item, index) => (
+                            <IndivPost 
+                                date={new Date(`${item.date}`).toLocaleDateString()} 
+                                description = {item.description}
+                                keywords = {item.keys}
+                                id = {item._id}
+                                publisher = {item.publisher}
+                                title = {item.title}
+                                key={index} 
+                                url = {item.url}
+                            /> 
+                        ))}
+                        {/* <div className="pagination-container">
+                            {Array.from({ length: totalPages }).map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleClickPagination(index + 1)}
+                                disabled={currentPage === index + 1}
+                            >
+                                {index + 1}
+                            </button>
+                            ))}
+                        </div> */}
                     </Box> 
                 </div>
             </>
