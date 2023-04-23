@@ -9,19 +9,26 @@ import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
 import SearchBox from '../../components/graph/Search';
+import axios from 'axios';
 //this is the root URL
-const API_URL = "https://project-glovo-api.onrender.com/news/"; //note that the news URL
+const API_URL = "https://project-glovo-api.onrender.com/news"; //note that the news URL
+
+
 
 function Sidebar({toggleGlobal, toggleCallback}) {
     //define the useState
     const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    // we only need to render this once, so the dependency array is empty
-    useEffect(() => {
-        //this will return some promise data
-        getAllPosts();
-    }, [])
+
+    console.log(searchInput)
+    const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
+    const request_body = {
+        key: 'ai',
+        page: 1,
+      };
+
+
     //for the pagination (From chatGPT)
     // const itemsPerPage  = 10;
     // const totalItems = posts.length;
@@ -29,27 +36,53 @@ function Sidebar({toggleGlobal, toggleCallback}) {
     // function handleClickPagination(pageNumber) {
     //     setCurrentPage(pageNumber);
     //   }
-
+    async function fetchData() {
+        try {
+          const response = await axios.get(API_ENDPOINT, {
+            params: request_body,
+          });
+          const data = response.data;
+          setPosts(data)
+          // Handle the response data
+        } catch (error) {
+          // Handle the error
+        }
+      }
     // const startIndex = (currentPage - 1) * itemsPerPage;
     // const endIndex = startIndex + itemsPerPage;
     // const itemsToShow = posts.slice(startIndex, endIndex);
-
-    console.log(searchInput)
-    //Get all posts
     const getAllPosts = async () => {
-        const response = await fetch(API_URL, {
-            method: "GET",
-        });
-        const data = await response.json();
-        setPosts(data);
+        try {
+          const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
+          const data = await response.json();
+          setPosts(data);
+        } catch (error) {
+          console.error(error);
+        }
     };
-
+    // we only need to render this once, so the dependency array is empty
+    useEffect(() => {
+        //this will return some promise data
+        // getAllPosts();
+        fetchData();
+    }, [])
+    // const getAllPosts = async () => {
+    //     const response = await fetch(API_URL, {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             key: 'ai', 
+    //             page: 1
+    //           })
+    //     });
+    //     const data = await response.json();
+    //     setPosts(data)
+    // };
 
     //mount the thing
     if(!posts){
         return null
     }
-
+    console.log(posts)
     return (
         <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
             <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>
@@ -91,7 +124,8 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                     alignItems={"center"}
                     gap = {2}
                     > 
-                        {posts && searchInput.length === 0 &&
+                        {}
+                        {/* {posts && searchInput.length === 0 &&
                             posts.map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
@@ -103,8 +137,8 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                                 key={index} 
                                 url = {item.url}
                             /> 
-                        ))}
-                        {posts && searchInput.length > 0 &&
+                        ))} */}
+                        {/* {posts && searchInput.length > 0 &&
                             posts.filter(item => item.keys.some(value => value.includes(searchInput))).map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
@@ -116,7 +150,7 @@ function Sidebar({toggleGlobal, toggleCallback}) {
                                 key={index} 
                                 url = {item.url}
                             /> 
-                        ))}
+                        ))} */}
                         {/* <div className="pagination-container">
                             {Array.from({ length: totalPages }).map((_, index) => (
                             <button
