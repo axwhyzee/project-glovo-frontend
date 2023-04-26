@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from "./Sidebar";
 import Graph from '../../components/Graph';
 import Zoom from '../../components/Zoom';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../components/navbar/Navbar';
 import Panel, { dummy } from '../../components/graph/Panel';
 import Resolver from '../../components/graph/Resolver';
 

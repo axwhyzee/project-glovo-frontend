@@ -103,6 +103,7 @@ body {
 }
 
 .network-graph-style-1 g.node .name {
+    fill: white;
     font-family: 'Noto Sans Mono', monospace;
     font-size: 0.6rem;
 }
@@ -205,3 +206,4 @@ line:hover {
 .graph-query-pushed {
     right: 520px;
 }
+

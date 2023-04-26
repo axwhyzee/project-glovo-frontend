@@ -1,0 +1,23 @@
+.navbar {
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 64px;
+  }
+  
+.nbitems {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+}
+
+.aboutus {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
