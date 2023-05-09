@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
@@ -257,12 +257,12 @@ function Graph({ data, highlight = [], settings = {} }) {
     const { width, height } = useWindowSize();
 
     const ctx = {}
-    const ref = useD3((svg) => {
+    const [ref, handlers] = useD3((svg) => {
         console.debug(`Graph rerender`);
         // Shared state
         ctx.svg = svg;
         ctx.data = data;
-        ctx.data.highlight = highlight;
+        ctx.data.highlight = [];
         ctx.data.graph = computeFocus(ctx.data.nodes, ctx.data.edges);
         ctx.width = width;
         ctx.height = height;
@@ -302,7 +302,17 @@ function Graph({ data, highlight = [], settings = {} }) {
             .force("collision", forceCollide)
             .on("tick", setupTicked.bind(ctx));
 
-    }, [data, highlight]);
+        return ({
+            onHighlight: (highlight) => {
+                ctx.data.highlight = highlight;
+                enableHighlight.bind(ctx)();
+            } 
+        });
+    }, [data]);
+
+    useEffect(() => {
+        handlers?.onHighlight(highlight);
+    }, [handlers, highlight])
 
     return (
         <svg
