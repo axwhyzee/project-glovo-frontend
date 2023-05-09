@@ -50,53 +50,71 @@ function renderEdges() {
         .attr("stroke-opacity", (d) => this.linkOpacity(d.w));
 }
 
-const renderFocus = (focusNode, edges, linkOpacity, svg) => {
-    const focusLinks = _.filter(
-        edges,
-        (d) => focusNode?.i === d.s || focusNode?.i === d.t
-    );
-    const interestedLinks = focusLinks.map((d) => d.i);
-    const interestedNodes = _.chain(focusLinks)
-        .flatMap((p) => [p.s, p.t])
-        .uniq()
+/**
+ * Builds an adjacency list
+ * @param {*} nodes 
+ * @param {*} edges 
+ * @returns Adjacency List (sparse)
+ */
+const computeFocus = (nodes, edges) => {
+    const mapping = _.chain(nodes)
+        .map("i")
+        .map(i => [i, {i, maxw: 0, edges: new Set(), neighbours: new Set()}])
+        .fromPairs()
         .value();
+    
+    for (const {i, s, t} of edges) {
+        mapping[s].edges.add(i);
+        mapping[t].edges.add(i);
+        mapping[s].neighbours.add(t);
+        mapping[t].neighbours.add(s);
+    }
+    for (const v of Object.values(mapping)) {
+        v.maxw = _.chain(edges).filter(p => v.edges.has(p.i)).map("w").max().value() || 0;
+    }
+    return mapping;
+};
 
+function renderFocus(focusNode) {
+    const { svg, linkOpacity: defaultOpacity } = this;
     const t = svg.transition().duration(75);
-    const linkLocalDash = d3.scaleLog().range([4, 0]).domain([1, d3.max(focusLinks, (d) => d.w)]);
-    const linkLocalOpacity = d3.scaleLog().range([0.2, 0.7]).domain([1, d3.max(focusLinks, (d) => d.w)]);
-
-    if (focusNode) {
-        svg
-            .selectAll("line.edge")
-            .filter((d) => interestedLinks.includes(d.i))
-            .transition(t)
-            .attr("stroke-opacity", (d) => linkLocalOpacity(d.w))
-            .attr("stroke-dasharray", (d) => `3 ${linkLocalDash(d.w) * 2}`);
-        svg
-            .selectAll("line.edge")
-            .filter((d) => !interestedLinks.includes(d.i))
-            .transition(t)
-            .attr("stroke-opacity", 0.1);
-        svg
-            .selectAll("g.node")
-            .filter((d) => interestedNodes.includes(d.i))
-            .transition(t)
-            .attr("opacity", 1);
-        svg
-            .selectAll("g.node")
-            .filter((d) => !interestedNodes.includes(d.i))
-            .transition(t)
-            .attr("opacity", 0.15);
-    } else {
-        svg
-            .selectAll("line.edge")
+    
+    if (!focusNode) {
+        svg.selectAll("line.edge")
             .transition(t)
             .attr("stroke", "black")
-            .attr("stroke-opacity", (d) => linkOpacity(d.w))
+            .attr("stroke-opacity", (d) => defaultOpacity(d.w))
             .attr("stroke-dasharray", null);
-        svg.selectAll("g.node").transition(t).attr("opacity", 1);
+        svg.selectAll("g.node, circle.point.highlight").transition(t).attr("opacity", 1);
+        return;
     }
-};
+
+    const graph = this.data.graph;
+    const { maxw, edges, neighbours } = graph[focusNode.i] || { maxw: 0, edges: [], neighbours: [] };
+
+    const interested = new Set([focusNode.i, ...neighbours]);
+    const dashSpacer = d3.scaleLog().range([4, 0]).domain([1, maxw]);
+    const overrideDash = (w) => `3 ${dashSpacer(w) * 2}`;
+    const overrideOpacity = d3.scaleLog().range([0.2, 0.7]).domain([1, maxw]);
+    
+    svg.selectAll("line.edge")
+        .filter((d) => edges.has(d.i))
+        .transition(t)
+        .attr("stroke-opacity", (d) => overrideOpacity(d.w))
+        .attr("stroke-dasharray", (d) => overrideDash(d.w));
+    svg.selectAll("line.edge")
+        .filter((d) => !edges.has(d.i))
+        .transition(t)
+        .attr("stroke-opacity", 0.1);
+    svg.selectAll("g.node, circle.point.highlight")
+        .filter((d) => interested.has(d.i))
+        .transition(t)
+        .attr("opacity", 1);
+    svg.selectAll("g.node, circle.point.highlight")
+        .filter((d) => !interested.has(d.i))
+        .transition(t)
+        .attr("opacity", 0.15);
+}
 
 function enableClick() {
     this.svg.selectAll("g.node").on("click", function (evt, d) {
@@ -115,7 +133,7 @@ function enableHover() {
         let pos = d3.pointer(evt, this);
         if (ctx.transform) pos = ctx.transform.invert(pos);
         const d = ctx.quadtree.find(pos[0], pos[1], 30);
-        renderFocus(d, ctx.data.edges, ctx.linkOpacity, ctx.svg);
+        renderFocus.bind(ctx)(d);
     }
     ctx.svg.on("pointermove", _.debounce(onMouseEnter));
 };
@@ -245,13 +263,13 @@ function Graph({ data, highlight = [], settings = {} }) {
         ctx.svg = svg;
         ctx.data = data;
         ctx.data.highlight = highlight;
+        ctx.data.graph = computeFocus(ctx.data.nodes, ctx.data.edges);
         ctx.width = width;
         ctx.height = height;
         ctx.linkOpacity = d3.scaleLog().domain([1, d3.max(ctx.data.edges, (d) => d.w)]).range([0.1, 0.25]);
         ctx.nameOpacity = d3.scalePow().exponent(2).domain([0.7, 1]).range([0, 1]);
         ctx.quadtree = undefined;
         ctx.transform = null;
-
         // Render
         renderEdges.bind(ctx)();
         renderNodes.bind(ctx)();

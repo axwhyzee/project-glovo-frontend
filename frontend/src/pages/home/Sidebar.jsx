@@ -52,7 +52,6 @@ function Sidebar({data: posts, toggleGlobal, toggleCallback}) {
     //     return null
     // }
 
-    console.log("Posts", posts);
     return (
         <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
             <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>
