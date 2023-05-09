@@ -1,32 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
-import {Search} from  "@mui/icons-material"
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
-import SearchBox from '../../components/graph/Search';
-import axios from 'axios';
-//this is the root URL
-const API_URL = "https://project-glovo-api.onrender.com/news"; //note that the news URL
 
-
-
-function Sidebar({toggleGlobal, toggleCallback}) {
+function Sidebar({data: posts, toggleGlobal, toggleCallback}) {
     //define the useState
-    const [posts, setPosts] = useState(null)
+    // const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+    // const [currentPage, setCurrentPage] = useState(1);
 
-    console.log(searchInput)
-    const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
-    const request_body = {
-        key: 'ai',
-        page: 1,
-      };
+    // console.log(searchInput)
+    // const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
+    // const request_body = {
+    //     key: 'ai',
+    //     page: 1,
+    //   };
 
 
     //for the pagination (From chatGPT)
@@ -40,27 +31,28 @@ function Sidebar({toggleGlobal, toggleCallback}) {
     // const endIndex = startIndex + itemsPerPage;
     // const itemsToShow = posts.slice(startIndex, endIndex);
     
-    const getAllPosts = async () => {
-        try {
-          //const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
-          const response = await fetch(`${API_ENDPOINT}`);
-          const data = await response.json();
-          setPosts(data);
-        } catch (error) {
-          console.error(error);
-        }
-    };
+    // const getAllPosts = async () => {
+    //     try {
+    //       //const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
+    //       const response = await fetch(`${API_ENDPOINT}`);
+    //       const data = await response.json();
+    //       setPosts(data);
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    // };
     // we only need to render this once, so the dependency array is empty
-    useEffect(() => {
-        //this will return some promise data
-        getAllPosts();
-    }, [])
-    console.log(posts)
+    // useEffect(() => {
+    //     //this will return some promise data
+    //     getAllPosts();
+    // }, [])
+    // console.log(posts)
     //mount the thing
-    if(!posts){
-        return null
-    }
+    // if(!posts){
+    //     return null
+    // }
 
+    console.log("Posts", posts);
     return (
         <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
             <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>

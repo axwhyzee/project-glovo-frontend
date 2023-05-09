@@ -6,8 +6,8 @@ import Grid from '@mui/material/Grid';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import Chip from '@mui/material/Chip';
+import thumbnail from '../assets/thumbnail.jpg';
 
-import Box from '@mui/material/Box'
 /**
  * title
  * url
@@ -25,7 +25,7 @@ function IndivPost({title, url, publisher, keywords, date, id}) {
           <CardMedia
               component="img"
               sx={{ width: 100 }}
-              image="https://i.natgeofe.com/n/665bbbca-1316-48b6-bce1-1ccb984a7546/0000014e-7468-d37e-a7de-ffe951310001_3x2.jpg"
+              image={thumbnail}
               alt="green iguana"
             />
           <CardActionArea onClick = {() => window.open(`${url}`)}  >
