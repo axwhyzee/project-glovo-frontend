@@ -91,17 +91,20 @@ const DUMMY_GRAPH = () => {
 const DUMMY_POST = ({"articles":[{"title":"Biden slams McCarthy, tells him to 'take default off the table' in debt ceiling fight","url":"https://www.cnbc.com/2023/04/19/biden-slams-mccarthy-debt-ceiling-fight.html","datetime":1681937813,"publisher":"CNBC","keys":["debt ceiling brinkmanship","wednesday slammed house republicans","mccarthy","president joe biden","national debt"]},{"title":"Trump made a bundle of cash selling NFTs, financial filings show","url":"https://www.cnbc.com/2023/04/14/trump-made-a-bundle-of-cash-selling-nfts-financial-filings-show.html","datetime":1681508846,"publisher":"CNBC","keys":["cards","financial disclosure form","nft int llc","trading cards","unique digital assets"]},{"title":"UK parliament's standards commissioner investigating PM Sunak","url":"https://www.cnbc.com/2023/04/17/uk-parliaments-standards-commissioner-investigating-pm-sunak.html","datetime":1681734032,"publisher":"CNBC","keys":["prime minister rishi sunak","commissioner","investigation","standards","parliament website"]},{"title":"Fox News apologizes to judge in defamation case for failing to disclose Rupert Murdoch's role at the network","url":"https://www.cnbc.com/2023/04/16/fox-news-apologizes-to-judge-for-failing-to-disclose-rupert-murdochs-role-at-the-network.html","datetime":1681656266,"publisher":"CNBC","keys":["dominion claims","murdoch","fox attorney blake rohrbacher","delaware superior court judge eric davis","fox news"]},{"title":"Fox-Dominion defamation trial to start Tuesday after delay, judge says ","url":"https://www.cnbc.com/2023/04/17/dominion-defamation-lawsuit-against-fox-news-delayed.html","datetime":1681691701,"publisher":"CNBC","keys":["dominion voting systems","dominion spokesperson","most defamation cases","judge eric davis","trial delay"]},{"title":"Trump has raised $34 million so far in 2023, including the indictment bump","url":"https://www.cnbc.com/2023/04/15/trump-has-raised-34-million-so-far-in-2023-including-the-indictment-bump.html","datetime":1681576712,"publisher":"CNBC","keys":["presidential race","dollar gop donors","new york charges","trump","fundraising numbers"]},{"title":"Supreme Court Justice Clarence Thomas reportedly has been claiming thousands of dollars annually from a shuttered real estate firm","url":"https://www.cnbc.com/2023/04/16/clarence-thomas-has-been-claiming-thousands-of-dollars-annually-from-a-shuttered-real-estate-firm.html","datetime":1681661732,"publisher":"CNBC","keys":["old conservative associate justice","justice","financial disclosure law","ginger holdings llc","thomas"]},{"title":"G-7 vows to step up moves to renewable energy, zero carbon","url":"https://www.cnbc.com/2023/04/16/g7-vows-to-step-up-moves-to-renewable-energy-zero-carbon.html","datetime":1681634517,"publisher":"CNBC","keys":["energy prices","clean energy transition","energy security","historic global carbon emissions","global carbon emissions"]},{"title":"McCarthy pledges a vote on one-year debt limit hike – without clear GOP support","url":"https://www.cnbc.com/2023/04/17/kevin-mccarthy-wall-street-speech.html","datetime":1681739097,"publisher":"CNBC","keys":["mccarthy","own fractious caucus","debt ceiling proposal","republican efforts","debt ceiling hike"]},{"title":"Macron addresses France amid anger over pension reform","url":"https://www.cnbc.com/2023/04/17/macron-addresses-france-amid-anger-over-pension-reform.html","datetime":1681756766,"publisher":"CNBC","keys":["macron","retirement age","french president","unpopular pension plan","france unemployment rate"]}],"page":1,"pages":19,"status":"Success"});
 
 function DataLoader({ offline = false, setGraphData, setPostData }) {
-    const [nodeCounter, ] = useState(_mkCounter());
-    const [edgeCounter, ] = useState(_mkCounter());
+    //const [nodeCounter, ] = useState(_mkCounter());
+    //const [edgeCounter, ] = useState(_mkCounter());
     const dummyGraph = useMemo(DUMMY_GRAPH, []);
     const dummyPosts = DUMMY_POST;
 
     useEffect(() => {
+        const nodeCounter = _mkCounter();
+        const edgeCounter = _mkCounter();
         const assignNodeId = () => nodeCounter.next().value;
         const assignEdgeId = () => edgeCounter.next().value;
         if (!offline) _fetchGraph(assignNodeId, assignEdgeId).then(p => setGraphData(p)).catch(() => setGraphData(dummyGraph));
         else setGraphData(dummyGraph);
-    }, [offline, nodeCounter, edgeCounter, dummyGraph, setGraphData]);
+    }, [offline, dummyGraph, setGraphData]);
+    //}, [offline, nodeCounter, edgeCounter, dummyGraph, setGraphData]);
 
     useEffect(() => {
         if (!offline) getAllPosts().then(p => setPostData(p)).catch(() => setPostData(dummyPosts));
