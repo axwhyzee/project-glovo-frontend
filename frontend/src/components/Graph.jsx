@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
 import _ from "lodash";
+import * as cola from "webcola";
 
 const RADIUS = 10;
 
@@ -288,19 +289,27 @@ function Graph({ data, highlight = [], settings = {} }) {
         enableDrag.bind(ctx)();
         enableHighlight.bind(ctx)();
 
-        // Construct the forces.
-        const forceNode = d3.forceManyBody().strength(-300);
-        const forceLink = d3.forceLink(ctx.data.edges).id((node) => node.i);
-        const forceCollide = d3.forceCollide().radius(RADIUS);
-
-        ctx.simulation = d3
-            .forceSimulation(ctx.data.nodes, (d) => d.i)
-            .force("link", forceLink)
-            .force("charge", forceNode)
-            .force("x", d3.forceX())
-            .force("y", d3.forceY())
-            .force("collision", forceCollide)
+        ctx.simulation = cola.d3adaptor(d3)
+            .nodes(ctx.data.nodes)
+            .links(ctx.data.edges)
+            .jaccardLinkLengths(ctx.data.edges.length / 10, 0.7)
+            .avoidOverlaps(true)
+            .start(30)
             .on("tick", setupTicked.bind(ctx));
+
+        // Construct the forces.
+        // const forceNode = d3.forceManyBody().strength(-300);
+        // const forceLink = d3.forceLink(ctx.data.edges).id((node) => node.i);
+        // const forceCollide = d3.forceCollide().radius(RADIUS);
+
+        // ctx.simulation = d3
+        //     .forceSimulation(ctx.data.nodes, (d) => d.i)
+        //     .force("link", forceLink)
+        //     .force("charge", forceNode)
+        //     .force("x", d3.forceX())
+        //     .force("y", d3.forceY())
+        //     .force("collision", forceCollide)
+        //     .on("tick", setupTicked.bind(ctx));
 
         return ({
             onHighlight: (highlight) => {
@@ -308,7 +317,7 @@ function Graph({ data, highlight = [], settings = {} }) {
                 enableHighlight.bind(ctx)();
             } 
         });
-    }, [data]);
+    }, [data, width, height]);
 
     useEffect(() => {
         handlers?.onHighlight(highlight);
