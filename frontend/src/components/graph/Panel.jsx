@@ -6,7 +6,9 @@ import { useState } from "react";
 
 const colorizer = d3.scaleOrdinal().range(d3.schemeTableau10);
 const data = [
-    { query: "eta", color: colorizer("eta") }
+    { query: "alpha", color: colorizer("alpha") },
+    { query: "beta", color: colorizer("beta") },
+    { query: "gamma", color: colorizer("gamma") },
 ]
 
 function Query({ query, color }) {
