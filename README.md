@@ -9,7 +9,7 @@
 
 ## Architecture ##
 ### Frontend
-* [React Frontend](https://github.com/axwhyzee/project-glovo)
+* [React Frontend](https://github.com/axwhyzee/project-glovo-frontend)
 
 ### Backend
 * [Keyword Extraction Microservice](https://github.com/axwhyzee/project-glovo-microservice-keyword-extraction)
