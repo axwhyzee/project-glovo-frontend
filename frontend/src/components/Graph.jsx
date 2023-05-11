@@ -106,7 +106,7 @@ function renderFocus(focusNode) {
     svg.selectAll("line.edge")
         .filter((d) => !edges.has(d.i))
         .transition(t)
-        .attr("stroke-opacity", 0.1);
+        .attr("stroke-opacity", 0.05);
     svg.selectAll("g.node, circle.point.highlight")
         .filter((d) => interested.has(d.i))
         .transition(t)
@@ -171,7 +171,7 @@ function enableZoom() {
 
     const zoom = d3.zoom()
         .extent([[0, 0], [this.width, this.height]])
-        .scaleExtent([0.4, 3])
+        .scaleExtent([0.2, 3])
         .filter(zoomFix)
         .on("zoom", handleZoom);
 
@@ -254,7 +254,16 @@ function enableHighlight() {
 
 };
 
-function Graph({ data, highlight = [], settings = {} }) {
+const transform = ({ nodes, edges }) => {
+    // only necessary for cola to compute bounding boxes
+    const nodes2 = _.chain(nodes)
+        .map(p => ({...p, width: RADIUS * p.name.length, height: RADIUS * 2.5}))
+        .value()
+
+    return { nodes: nodes2, edges };
+}
+
+function Graph({ data, highlight = [], cola_engine = true }) {
     const { width, height } = useWindowSize();
 
     const ctx = {}
@@ -262,7 +271,7 @@ function Graph({ data, highlight = [], settings = {} }) {
         console.debug(`Graph rerender`);
         // Shared state
         ctx.svg = svg;
-        ctx.data = data;
+        ctx.data = transform(data);
         ctx.data.highlight = [];
         ctx.data.graph = computeFocus(ctx.data.nodes, ctx.data.edges);
         ctx.width = width;
@@ -289,27 +298,31 @@ function Graph({ data, highlight = [], settings = {} }) {
         enableDrag.bind(ctx)();
         enableHighlight.bind(ctx)();
 
-        ctx.simulation = cola.d3adaptor(d3)
-            .nodes(ctx.data.nodes)
-            .links(ctx.data.edges)
-            .jaccardLinkLengths(ctx.data.edges.length / 10, 0.7)
-            .avoidOverlaps(true)
-            .start(30)
-            .on("tick", setupTicked.bind(ctx));
+        if (cola_engine) {
+            ctx.simulation = cola.d3adaptor(d3)
+                .nodes(ctx.data.nodes)
+                .links(ctx.data.edges)
+                .jaccardLinkLengths(ctx.data.edges.length / 8, 0.7)
+                .avoidOverlaps(true)
+                .handleDisconnected(true)
+                .start(30)
+                .on("tick", setupTicked.bind(ctx));
+        } else {
+            // Construct the forces.
+            const forceNode = d3.forceManyBody().strength(-300);
+            const forceLink = d3.forceLink(ctx.data.edges).id((node) => node.i);
+            const forceCollide = d3.forceCollide().radius(RADIUS);
 
-        // Construct the forces.
-        // const forceNode = d3.forceManyBody().strength(-300);
-        // const forceLink = d3.forceLink(ctx.data.edges).id((node) => node.i);
-        // const forceCollide = d3.forceCollide().radius(RADIUS);
-
-        // ctx.simulation = d3
-        //     .forceSimulation(ctx.data.nodes, (d) => d.i)
-        //     .force("link", forceLink)
-        //     .force("charge", forceNode)
-        //     .force("x", d3.forceX())
-        //     .force("y", d3.forceY())
-        //     .force("collision", forceCollide)
-        //     .on("tick", setupTicked.bind(ctx));
+            ctx.simulation = d3
+                .forceSimulation(ctx.data.nodes, (d) => d.i)
+                .force("link", forceLink)
+                .force("charge", forceNode)
+                // .force("x", d3.forceX())
+                // .force("y", d3.forceY())
+                .force("center",  d3.forceCenter())
+                .force("collision", forceCollide)
+                .on("tick", setupTicked.bind(ctx));
+        }
 
         return ({
             onHighlight: (highlight) => {
@@ -317,11 +330,16 @@ function Graph({ data, highlight = [], settings = {} }) {
                 enableHighlight.bind(ctx)();
             } 
         });
-    }, [data, width, height]);
+    }, [data, width, height, cola]);
 
     useEffect(() => {
         handlers?.onHighlight(highlight);
     }, [handlers, highlight])
+
+    useEffect(() => {
+        // Stop simulation after 7s to stabilise the layout
+        setTimeout(() => {ctx.simulation?.stop()}, 7000);
+    }, []);
 
     return (
         <svg
