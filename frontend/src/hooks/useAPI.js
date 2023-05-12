@@ -11,5 +11,5 @@ export const useAPI = (fetchPromise, offline=false, offline_substitute=null) => 
         fetchPromise()
             .then(r => setData(r));
         }, [fetchPromise, offline]);
-        return offline ? offline_substitute : (data === undefined ? offline_substitute : data);
+        return offline ? offline_substitute : data;
   }

@@ -63,7 +63,7 @@ function DataLoader({ offline = false, setGraphData, setPostData }) {
     const posts = useAPI(getAllPosts, offline, DUMMY_POST);
 
     useEffect(() => {
-        setGraphData(graph);
+        setGraphData(graph || { nodes:[], edges:[] });
         setPostData(posts);
     }, [posts, graph, setGraphData, setPostData]);
 
