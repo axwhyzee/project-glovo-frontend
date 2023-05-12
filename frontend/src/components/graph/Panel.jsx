@@ -1,8 +1,6 @@
 import React from "react";
 import * as d3 from "d3";
 import SearchBox from "./Search";
-import _ from "lodash";
-import { useState } from "react";
 
 const colorizer = d3.scaleOrdinal().range(d3.schemeTableau10);
 const data = [
@@ -19,8 +17,7 @@ function Query({ query, color }) {
     )
 }
 
-function Panel({ data = [], update, toggleGlobal }) {
-    const [toggle, SetToggle] = useState(toggleGlobal);
+function Panel({ data = [], update, isSideBarOpen }) {
     const append = (v) => {
         const q = v.trim().toLowerCase();
         if (q.length === 0) return;
@@ -29,9 +26,7 @@ function Panel({ data = [], update, toggleGlobal }) {
     };
 
     return (
-        
-        <section className={"graph-query" + (toggleGlobal ? " graph-query-pushed" : "")}>
-            
+        <section className={`graph-query ${isSideBarOpen ? 'pushed' : ''}`}>
             <SearchBox update={append} />
             <ul>
                 {data.map(q => <Query key={q.query} {...q} />)}

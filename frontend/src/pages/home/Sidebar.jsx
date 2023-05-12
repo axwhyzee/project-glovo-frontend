@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
 
-function Sidebar({data: posts, toggleGlobal, toggleCallback}) {
+function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
     //define the useState
     // const [posts, setPosts] = useState(null)
     const [searchInput, setSearchInput] = useState("");
@@ -53,13 +53,13 @@ function Sidebar({data: posts, toggleGlobal, toggleCallback}) {
     // }
 
     return (
-        <section className={'sidebar' + (toggleGlobal ? ' expanded' : '')}>
-            <button className='toggle-sidebar' type='button' onClick={() => toggleCallback()}>
-                <FontAwesomeIcon icon={toggleGlobal ? faCaretRight : faCaretLeft} />
+        <section className={`sidebar ${isSideBarOpen ? 'expanded' : ''}`}>
+            <button className='toggle-sidebar' type='button' onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
+                <FontAwesomeIcon icon={isSideBarOpen ? faCaretRight : faCaretLeft} />
             </button>
 
             
-            {toggleGlobal ? 
+            {isSideBarOpen ? 
                 <>
                 <Box
                     width="100%"

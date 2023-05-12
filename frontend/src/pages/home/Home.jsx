@@ -9,13 +9,13 @@ import Resolver from '../../components/graph/Resolver';
 function Home({ graphData, postData }) {
   const [queries, setQueries] = useState(dummy);
   const [resolved, setResolved] = useState([]);
-  const [toggleGlobal, setToggleGlobal] = useState(false);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
   return (
     <div className='home'>
       <Navbar />
-      <Sidebar data={postData} toggleGlobal={toggleGlobal} toggleCallback={() => setToggleGlobal(toggleGlobal => !toggleGlobal)}/>
-      <Panel data={queries} update={setQueries} toggleGlobal={toggleGlobal}/>
+      <Sidebar data={postData} isSideBarOpen={isSideBarOpen} setIsSideBarOpen={setIsSideBarOpen} />
+      <Panel data={queries} update={setQueries} isSideBarOpen={isSideBarOpen}/>
       <Zoom />
       <Graph data={graphData} highlight={resolved} />
       <Resolver data={graphData} queries={queries} update={setResolved}/>
