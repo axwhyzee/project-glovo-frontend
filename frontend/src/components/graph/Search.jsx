@@ -65,8 +65,8 @@ function SearchBox({ update }) {
                 value={value}
                 onChange={e => setValue(e.target.value)}
                 onKeyDown={onSubmit}
-                placeholder="Search… (Ctrl+/)"
-                inputProps={{ 'aria-label': 'search' }}
+                placeholder="Find and colour terms… (Ctrl+/)"
+                inputProps={{ 'aria-label': 'Colour terms' }}
             />
         </Search>)
 }
