@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { useD3 } from '../hooks/useD3';
 import useWindowSize from 'use-window-size-v2';
@@ -265,10 +265,10 @@ const transform = ({ nodes, edges }) => {
 
 function Graph({ data, highlight = [], cola_engine = true }) {
     const { width, height } = useWindowSize();
-
-    const ctx = {}
+    const ctxRef = useRef({});
     const [ref, handlers] = useD3((svg) => {
         console.debug(`Graph rerender`);
+        const ctx = ctxRef.current = {};
         // Shared state
         ctx.svg = svg;
         ctx.data = transform(data);
@@ -337,9 +337,13 @@ function Graph({ data, highlight = [], cola_engine = true }) {
     }, [handlers, highlight])
 
     useEffect(() => {
-        // Stop simulation after 7s to stabilise the layout
-        setTimeout(() => {ctx.simulation?.stop()}, 7000);
-    }, []);
+        // Stop simulation after 30s to stabilise the layout
+        const timer = setTimeout(() => {
+            ctxRef.current.simulation.stop();
+            console.debug(ctxRef.current.data);
+        }, 30000);
+        return () => clearTimeout(timer);
+    }, [ctxRef]);
 
     return (
         <svg
