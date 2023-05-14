@@ -2,15 +2,15 @@ import _ from "lodash";
 
 const API_URL = "https://project-glovo-api.onrender.com";
 
-const DEFAULT_HEADERS = {
+const OFFLINE_HEADERS = {
     cache: 'force-cache'
 };
 
-export const getAllPosts = () => fetch(`${API_URL}/news/`, DEFAULT_HEADERS).then(r => r.json());
+export const getAllPosts = () => fetch(`${API_URL}/news/`).then(r => r.json());
+export const getAllPostsOffline = () => fetch(`${API_URL}/news/`, OFFLINE_HEADERS).then(r => r.json());
 
-export const getEdges = () => fetch(`${API_URL}/edges/`, DEFAULT_HEADERS).then(r => r.json());
-
-export const getDummy = () => fetch('https://dummyjson.com/products/1', DEFAULT_HEADERS).then(r => r.json());
+export const getEdges = () => fetch(`${API_URL}/edges/`).then(r => r.json());
+export const getEdgesOffline = () => fetch(`${API_URL}/edges/`, OFFLINE_HEADERS).then(r => r.json());
 
 export const getEdgesWithIds = async () => {
     const mkCounter = function*() {
@@ -46,4 +46,4 @@ export const getEdgesWithIds = async () => {
     const assignEdgeId = () => edgeCounter.next().value;
     const data = await getEdges();
     return transform(data, assignNodeId, assignEdgeId);
-}
+};
