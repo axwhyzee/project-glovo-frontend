@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons'
 import InputBase from '@mui/material/InputBase';
@@ -8,12 +8,12 @@ import './home.scss';
 
 function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
     //define the useState
-    // const [posts, setPosts] = useState(null)
+    const [searchPosts, setsearchPosts] = useState({articles: ""})
     const [searchInput, setSearchInput] = useState("");
+    const [ready, setReady] = useState(false);
     // const [currentPage, setCurrentPage] = useState(1);
 
-    // console.log(searchInput)
-    // const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
+    const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
     // const request_body = {
     //     key: 'ai',
     //     page: 1,
@@ -34,23 +34,44 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
     // const getAllPosts = async () => {
     //     try {
     //       //const response = await fetch(`${API_ENDPOINT}?key=${request_body.key}&page=${request_body.page}`);
-    //       const response = await fetch(`${API_ENDPOINT}`);
-    //       const data = await response.json();
-    //       setPosts(data);
+    //       if(!searchPosts){
+    //         const response = await fetch(`${API_ENDPOINT}`);
+    //         const data = await response.json();
+    //         setsearchPosts(data);
+    //       } else{
+
+    //       }
     //     } catch (error) {
     //       console.error(error);
     //     }
     // };
+
+    const handleKeyDown = async (e) => {
+        // e.preventDefault();
+        
+        if (e.key === 'Enter'){
+            setReady(true);
+            const requestBody =  searchInput
+            //this is damn weird
+            console.log(`${API_ENDPOINT}?key=${requestBody}&page=1`);
+            const response = await fetch(`${API_ENDPOINT}?keys=${requestBody}&page=1`, {
+                method: "GET"
+            });
+            const responseData = await response.json();
+            setsearchPosts(responseData);
+        }
+    }
     // we only need to render this once, so the dependency array is empty
     // useEffect(() => {
     //     //this will return some promise data
     //     getAllPosts();
     // }, [])
-    // console.log(posts)
-    //mount the thing
-    // if(!posts){
-    //     return null
-    // }
+    console.log(posts)
+    console.log(searchPosts)
+    // mount the thing
+    if(!posts){
+        return null
+    }
 
     return (
         <section className={`sidebar ${isSideBarOpen ? 'expanded' : ''}`}>
@@ -78,6 +99,7 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
                         type="text"
                         onChange={(e) => setSearchInput(e.target.value)}
                         value={searchInput}
+                        onKeyDown={handleKeyDown}
                     >
                     </InputBase>
 
@@ -93,7 +115,7 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
                     alignItems={"center"}
                     gap = {2}
                     > 
-                        {posts.articles && searchInput.length === 0 &&
+                        {posts.articles && !ready &&
                             posts.articles.map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
@@ -106,8 +128,8 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
                                 url = {item.url}
                             /> 
                         ))}
-                        {posts.articles && searchInput.length > 0 &&
-                            posts.articles.filter(item => item.keys.some(value => value.includes(searchInput))).map((item, index) => (
+                        {searchPosts.articles && ready &&
+                            searchPosts.articles.map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
                                 description = {item.description}
