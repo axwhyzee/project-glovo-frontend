@@ -1,0 +1,110 @@
+// video {
+//     object-fit: cover;
+//     width: 100%;
+//     position: relative;
+//     z-index: -1;
+//     // opacity: 0.5;
+// }
+
+// .header-container {
+//     // background-color: url('https://i.pinimg.com/736x/25/44/5a/25445a43d5ac691372f7091703bb16a2.jpg') center center/cover no-repeat;
+//     // background-color: rgba(0, 0, 0, 0.5);
+//     background-color: black cover;
+//     height: 100%;
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: center;
+//     align-items: center;
+//     box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0);
+//     // filter:brightness(50%);
+//     object-fit: contain;
+// }
+
+// .header-container > h1 {
+//     // color: #fff;
+//     color: black;
+//     font-size: 100px;
+//     margin-top: -100px;
+// }
+
+// .header-container > p {
+//     // color: #fff;
+//     color: black;
+//     font-size: 32px;
+//     margin-top: 8px;
+// }
+
+
+// @media screen and (max-width: 960px) {
+//     .header-container > h1 {
+//         font-size: 70px;
+//         margin-top: -150px;
+//     }
+// }
+
+
+// @media screen and (max-width: 768px) {
+//     .header-container > h1 {
+//         font-size: 50px;
+//         margin-top: -100px;
+//     }
+
+//     .header-container > p {
+//         font-size: 30px;
+//     }
+// }
+
+
+
+.description {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.description h1, p {
+    color: white;
+    font-size: 40px;
+    padding: 0 auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.header-container video {
+    position: relative;
+    // position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    // object-fit: contain;
+    // position: absolute;
+}
+
+.header-container {
+    position: relative;
+    background-color: white;
+}
+
+// mobile: width < 740px
+@media only screen and (max-width: 739px) {
+    .description h1, p {
+        font-size: 28px;
+    }
+}
+
+// tablet: width >= 740px and width < 1024px
+@media only screen and (min-width: 740px) and (max-width: 1023px) {
+    .description h1, p {
+        font-size: 36px;
+    }
+}
