@@ -1,11 +1,15 @@
 import React from 'react'
 import "./about.scss"
 import Navbar from '../../components/navbar/Navbar'
+import Header from '../../components/header/Header'
+import Cards from '../../components/cards/Cards'
 function About() {
   return (
     <>
     <Navbar></Navbar>
-    <header>
+    <Header />
+    <Cards />
+    {/* <header>
         <div class="title">
             <h3>The creative crew</h3>
         </div>
@@ -57,10 +61,7 @@ function About() {
                     <figcaption>stan john</figcaption>
                 </figure>
             </div>
-            </main>
-
-
-
+            </main> */}
     </>
   )
 }
