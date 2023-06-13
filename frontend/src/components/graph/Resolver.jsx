@@ -13,11 +13,10 @@ function Resolver({ data, queries, update }) {
             .filter()
             .value();
         return nodes;
-    },
-        [data, queries])
+    }, [data, queries])
     useEffect(() => {
         update(nodes);
-    }, [nodes, update]);
+    }, [queries]);
     return null;
 }
 
