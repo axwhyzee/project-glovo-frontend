@@ -6,45 +6,68 @@ import Grid from '@mui/material/Grid';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import Chip from '@mui/material/Chip';
-import thumbnail from '../assets/thumbnail.jpg';
-
-/**
- * title
- * url
- * publisher
- * date
- * keywords
- */
+import CNBC from '../assets/logos/CNBC.png';
+import ST from '../assets/logos/ST.png';
+import YAHOO from '../assets/logos/YAHOO.png';
 
 
-function IndivPost({title, url, publisher, keywords, date, id}) {
+const mappings = {
+  'Straits_Times': ST,
+  'CNBC': CNBC,
+  'Yahoo': YAHOO
+}
+function IndivPost({title, url, publisher, keywords, date, id, selectNode}) {
   return (
-      <Grid container spacing={1} >
-        
-          <Card sx={{display: 'flex', maxWidth: 525}}>
-          <CardMedia
-              component="img"
-              sx={{ width: 100 }}
-              image={thumbnail}
-              alt="green iguana"
-            />
-          <CardActionArea onClick = {() => window.open(`${url}`)}  >
-              <CardContent>
-                <Typography gutterBottom variant="h6" component="div">
-                  {title.length > 50 ? title.substring(0,50) + "...": title}
+      <Grid container spacing={1} paddingTop={1}>
+          <Card 
+            sx={{
+              width: 525,
+              backgroundColor: '#333',
+              borderRadius: 4
+          }}>
+            <CardActionArea onClick = {() => window.open(`${url}`)}  >
+              <CardContent 
+                sx={{
+                  display: 'flex', 
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingBottom: 0
+              }}>
+                <CardMedia
+                  component="img"
+                  sx={{ maxWidth: 50, maxHeight: 50 }}
+                  image={mappings[publisher]}
+                  alt={publisher}
+                />
+                <Typography 
+                  sx={{
+                    color: '#F3F3F3',
+                    padding: '5px 0 5px 20px'
+                  }} 
+                  variant="h8" 
+                  component="div" 
+                >
+                  {title.length > 150 ? title.substring(0, 150) + "...": title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Publisher: {publisher}
-                </Typography>
-                <p></p>
-                <Typography variant="body2" color="text.primary">
-                  Top Three Keywords:
-                </Typography>
-                {keywords.slice(0, 3).map((element, index) => (
-                  <Chip key={index} label={element} variant="outlined" sx={{ marginRight: '8px', marginTop: '8px'}}/> 
-                ))}
               </CardContent>
-          </CardActionArea>
+            </CardActionArea>
+          <CardContent sx={{paddingTop: 0}}>
+            {keywords.map((element, index) => (
+              <Chip 
+                key={index} 
+                label={element} 
+                variant="outlined" 
+                sx={{ 
+                  color: '#AAA',
+                  marginRight: '8px', 
+                  marginTop: '8px',
+                  fontSize: '8.5px',
+                  height: '24px'
+                }}
+                onClick={()=>selectNode(element)}
+              /> 
+            ))}
+          </CardContent>
         </Card>
       </Grid>
   )
