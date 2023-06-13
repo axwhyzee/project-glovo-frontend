@@ -26,6 +26,7 @@ const renderNode = svg => {
         .append("text")
         .classed("name", true)
         .attr("dy", 15)
+        .attr("style", "color: #AAA")
         .text((d) => d.name);
 };
 
@@ -117,14 +118,9 @@ function renderFocus(focusNode) {
         .attr("opacity", 0.15);
 }
 
-function enableClick() {
+function enableClick(selectNodeCallback) {
     this.svg.selectAll("g.node").on("click", function (evt, d) {
-        console.log("Node selected", d);
-        // evt.currentTarget.dispatchEvent(
-        //   new CustomEvent("input", {
-        //     bubbles: true
-        //   })
-        // );
+        selectNodeCallback(d.name);
     });
 }
 
@@ -231,11 +227,10 @@ function enableDrag() {
         .on("end", dragended);
 }
 
-function enableHighlight() {
-    const highlight = _.map(this.data.highlight, (h) => {
+function enableHighlight(newHighlight) {
+    const highlight = _.map(newHighlight, (h) => {
         return { ...h, ref: _.find(this.data.nodes, (q) => q.i === h.i) };
     })
-    
     const node = this.svg
         .select(".root")
         .selectAll(".highlight")
@@ -247,6 +242,8 @@ function enableHighlight() {
                     .classed("highlight", true)
                     .attr("key", (d) => d.i)
                     .attr("fill", d => d.color)
+                    .attr("cx", (d) => d.ref.x)
+                    .attr("cy", (d) => d.ref.y)
             },
             update => update,
             exit => exit.remove()
@@ -263,10 +260,12 @@ const transform = ({ nodes, edges }) => {
     return { nodes: nodes2, edges };
 }
 
-function Graph({ data, highlight = [], cola_engine = true }) {
+function Graph({ data, selectNode, setLoading, highlight, simulationTime, cola_engine = true }) {
     const { width, height } = useWindowSize();
+    const zoomAnimation = useRef();
     const ctxRef = useRef({});
     const [ref, handlers] = useD3((svg) => {
+        if (!data.nodes.length || !data.edges.length) return;
         console.debug(`Graph rerender`);
         const ctx = ctxRef.current = {};
         // Shared state
@@ -291,13 +290,6 @@ function Graph({ data, highlight = [], cola_engine = true }) {
             .y((d) => d.y)
             .addAll(ctx.data.nodes);
 
-        enableClick.bind(ctx)();
-        enableTooltip.bind(ctx)();
-        enableHover.bind(ctx)();
-        enableZoom.bind(ctx)();
-        enableDrag.bind(ctx)();
-        enableHighlight.bind(ctx)();
-
         if (cola_engine) {
             ctx.simulation = cola.d3adaptor(d3)
                 .nodes(ctx.data.nodes)
@@ -305,7 +297,7 @@ function Graph({ data, highlight = [], cola_engine = true }) {
                 .jaccardLinkLengths(ctx.data.edges.length / 8, 0.7)
                 .avoidOverlaps(true)
                 .handleDisconnected(true)
-                .start(30)
+                .start(simulationTime)
                 .on("tick", setupTicked.bind(ctx));
         } else {
             // Construct the forces.
@@ -317,43 +309,83 @@ function Graph({ data, highlight = [], cola_engine = true }) {
                 .forceSimulation(ctx.data.nodes, (d) => d.i)
                 .force("link", forceLink)
                 .force("charge", forceNode)
-                // .force("x", d3.forceX())
-                // .force("y", d3.forceY())
                 .force("center",  d3.forceCenter())
                 .force("collision", forceCollide)
                 .on("tick", setupTicked.bind(ctx));
+            graphInit();
         }
+    }, [data]);
 
-        return ({
-            onHighlight: (highlight) => {
-                ctx.data.highlight = highlight;
-                enableHighlight.bind(ctx)();
-            } 
-        });
-    }, [data, width, height, cola]);
+    const zoomToggle = (zoomVal, usePrev=false) => {
+        const currTransform = d3.zoomIdentity;
+        if (usePrev) zoomVal += currTransform.k;
+        currTransform.k = zoomVal;
 
+        ctxRef.current.svg
+            .select(".root")
+            .attr("transform", currTransform);
+        ctxRef.current.svg
+            .selectAll("g.node text.name")
+            .attr("opacity", ctxRef.current.nameOpacity(zoomVal));
+    }
+
+    const graphInit = () => {
+        // zoom animation on load
+        setLoading(false);
+        let x = 0;
+        const P = 0.2; // INITIAL ZOOM
+        const Q = 0.8; // FINAL ZOOM
+        const S = .75; // SPEED
+        const T = 25; // TIMESTEP in MS
+        const O = Math.acos(P + 1- Q) / S; // OFFSET
+        const t = T / 1000; // T'
+        const easeback = 2;
+        
+        zoomAnimation.current = setInterval(() => {
+            zoomToggle(Math.cos((x - O) * S) -  1 + Q);
+            x += t;
+            if (x - t * easeback >= O) {
+                // make interactable only after zoom animation
+                clearInterval(zoomAnimation.current);
+                enableClick.bind(ctxRef.current)(selectNode);
+                enableTooltip.bind(ctxRef.current)();
+                enableHover.bind(ctxRef.current)();
+                enableZoom.bind(ctxRef.current)();
+                enableDrag.bind(ctxRef.current)();
+            }
+        }, T);
+    }
     useEffect(() => {
-        handlers?.onHighlight(highlight);
-    }, [handlers, highlight])
+        if (ctxRef.current.svg) enableHighlight.bind(ctxRef.current)(highlight);
+    }, [highlight])
 
     useEffect(() => {
         // Stop simulation after 30s to stabilise the layout
         const timer = setTimeout(() => {
             ctxRef.current.simulation.stop();
-            console.debug(ctxRef.current.data);
-        }, 30000);
-        return () => clearTimeout(timer);
+        }, simulationTime*1000);
+
+        return () => {
+            clearTimeout(timer); 
+            if (zoomAnimation.current) clearInterval(zoomAnimation.current);
+        }
     }, [ctxRef]);
 
     return (
-        <svg
-            className="network-graph-style-1"
-            ref={ref}
-            width={width}
-            height={height}
-            viewBox={[[-width / 2, -height / 2, width, height]]}>
-            <g className="root"></g>
-        </svg>
+        <>
+            <svg
+                className="network-graph-style-1"
+                ref={ref}
+                width={width}
+                height={height}
+                viewBox={[[-width / 2, -height / 2, width, height]]}>
+                <g className="root"></g>
+            </svg>
+            {/* <div className="zoom-controls">
+                <button onClick={() => zoomToggle(0.05, true)}>+</button>
+                <button onClick={() => zoomToggle(-0.05, true)}>-</button>
+            </div> */}
+        </>
     );
 }
 
