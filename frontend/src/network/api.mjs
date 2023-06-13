@@ -1,5 +1,6 @@
 import _ from "lodash";
 
+
 const API_URL = "https://project-glovo-api.onrender.com";
 
 const OFFLINE_HEADERS = {
@@ -7,6 +8,8 @@ const OFFLINE_HEADERS = {
 };
 
 export const getAllPosts = () => fetch(`${API_URL}/news/`).then(r => r.json());
+export const getPostsByKey = (val) => fetch(`${API_URL}/news/?key=${encodeURIComponent(val)}`).then(r => r.json());
+export const getClusterByKey = (val) => fetch(`${API_URL}/cluster/?centroid=${encodeURIComponent(val)}`).then(r => r.json());
 export const getAllPostsOffline = () => fetch(`${API_URL}/news/`, OFFLINE_HEADERS).then(r => r.json());
 
 export const getEdges = () => fetch(`${API_URL}/edges/`).then(r => r.json());
