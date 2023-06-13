@@ -1,0 +1,66 @@
+$planet: 100px;
+$aesteroid: 10px;
+
+.overlay {
+    background: rgba(0,0,0,0.3);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+}
+
+.spinner-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 101;
+}
+
+.spinner-planet {
+    width: $planet;
+    height: $planet;
+    border: 1px solid #f3f3f3;
+    border-radius: 100%;
+}
+
+.spinner-orbit {
+    width: $aesteroid;
+    height: $planet + $aesteroid;
+    margin-left: $planet / 2 - $aesteroid / 2;
+    margin-top: -1 * $aesteroid / 2;
+    border-top: $aesteroid solid aquamarine;
+    -webkit-animation: spin 1.5s ease-in-out infinite;
+    animation: spin 1.5s ease-in-out infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { 
+        -webkit-transform: rotate(0deg); 
+        border-color: aquamarine;
+    }
+    50% {
+        border-color: rgb(238, 158, 60)
+    }
+    100% { 
+        -webkit-transform: rotate(360deg); 
+        border-color: aquamarine;
+    }
+}
+  
+@keyframes spin {
+    0% { 
+        -webkit-transform: rotate(0deg); 
+        border-color: aquamarine;
+    }
+    50% {
+        border-color: rgb(238, 158, 60)
+    }
+    100% { 
+        -webkit-transform: rotate(360deg); 
+        border-color: aquamarine;
+    }
+}
