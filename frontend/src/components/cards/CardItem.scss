@@ -1,26 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
 .card {
   display: inline-block;
   height: 360px;
-/*   border: 1px solid #CCC; */
   margin: 40px 0;
-  // perspective: 400px;
-
   position: relative;
   width: 220px;
-  // padding: 30px;
   border-radius: 10px;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // flex-direction: column;
   margin: 20px;
 }
 
@@ -45,7 +29,6 @@
   color: white;
   text-align: center;
   font-weight: bold;
-  font-size: 40px;
   backface-visibility: hidden;
 }
 
@@ -62,9 +45,9 @@
   // padding: 20px;
   color: #fff;
   font-weight: bold;
-  font-size: 24px;
+  font-size: 14px;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #222;
   border-radius: 10px;
 }
 
@@ -74,22 +57,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  // width: 100%;
-  // height: 100%;
+}
+
+.backInfo {
+  white-space: pre-line
 }
 
 .wrapper,
 .wrapper .img-area,
 .social-icons a,
 .buttons button{
-  background: #ecf0f3;
-  box-shadow: -3px -3px 7px #ffffff,
-               3px 3px 5px #ceced1;
+  background: #333;
+  box-shadow: -3px -3px 15px rgba(0,0,0,0.15),
+               3px 3px 15px rgba(0,0,0,0.15),
 }
 .wrapper{
   position: relative;
   width: 220px;
-  padding: 30px;
+  padding: 10px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -144,11 +129,11 @@
 .wrapper .name{
   font-size: 23px;
   font-weight: 500;
-  color: #31344b;
+  color: #AAA;
   margin: 10px 0 5px 0;
 }
-.wrapper .about{
-  color: #44476a;
+.wrapper .role{
+  color: #666;
   font-weight: 400;
   font-size: 16px;
 }
@@ -174,15 +159,16 @@
   bottom: 0;
   right: 0;
   border-radius: 50%;
-  background: #ecf0f3;
-  box-shadow: inset -3px -3px 7px #ffffff,
-              inset 3px 3px 5px #ceced1;
+  background: #252525;
+  box-shadow: inset -3px -3px 7px #111,
+              inset 3px 3px 5px #222;
 }
 .buttons button:hover:before{
   z-index: -1;
   border-radius: 5px;
 }
 .social-icons a i{
+  font-size: 15px;
   position: relative;
   z-index: 3;
   text-align: center;
@@ -190,13 +176,13 @@
   height: 100%;
   line-height: 40px;
 }
-.social-icons a.fb i{
+.social-icons a.linkedin i{
   color: #0072b1;
 }
-.social-icons a.twitter i{
+.social-icons a.github i{
   color: #171515;
 }
-.social-icons a.insta i{
+.social-icons a.email i{
   color: #BB001B;
 }
 .social-icons a.yt i{

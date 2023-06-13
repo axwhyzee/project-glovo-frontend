@@ -1,7 +1,6 @@
 .cards {
     position: relative;
     padding: 4rem 0 0;
-    background: #fff;
 }
 
 h1 {
@@ -22,6 +21,7 @@ h1 {
     list-style-type: none;
     align-content: center;
     justify-content: center;
+    padding: 0;
 }
 
 .card_wrapper:nth-child(1) {
