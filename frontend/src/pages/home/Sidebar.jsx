@@ -6,14 +6,14 @@ import Box from '@mui/material/Box';
 import IndivPost from '../../components/IndivPost';
 import './home.scss';
 
-function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
-    //define the useState
+function Sidebar({ posts, isSideBarOpen, setIsSideBarOpen, selectNode }) {
+    // define the useState
     const [searchPosts, setsearchPosts] = useState({articles: ""})
-    const [searchInput, setSearchInput] = useState("");
+    // const [searchInput, setSearchInput] = useState("");
     const [ready, setReady] = useState(false);
     // const [currentPage, setCurrentPage] = useState(1);
 
-    const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
+    // const API_ENDPOINT = 'https://project-glovo-api.onrender.com/news';
     // const request_body = {
     //     key: 'ai',
     //     page: 1,
@@ -46,30 +46,28 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
     //     }
     // };
 
-    const handleKeyDown = async (e) => {
-        // e.preventDefault();
+    // const handleKeyDown = async (e) => {
+    //     // e.preventDefault();
         
-        if (e.key === 'Enter'){
-            setReady(true);
-            const requestBody =  searchInput
-            //this is damn weird
-            console.log(`${API_ENDPOINT}?key=${requestBody}&page=1`);
-            const response = await fetch(`${API_ENDPOINT}?keys=${requestBody}&page=1`, {
-                method: "GET"
-            });
-            const responseData = await response.json();
-            setsearchPosts(responseData);
-        }
-    }
+    //     if (e.key === 'Enter'){
+    //         setReady(true);
+    //         const requestBody =  searchInput
+    //         //this is damn weird
+    //         console.log(`${API_ENDPOINT}?key=${requestBody}&page=1`);
+    //         const response = await fetch(`${API_ENDPOINT}?keys=${requestBody}&page=1`, {
+    //             method: "GET"
+    //         });
+    //         const responseData = await response.json();
+    //         setsearchPosts(responseData);
+    //     }
+    // }
     // we only need to render this once, so the dependency array is empty
     // useEffect(() => {
     //     //this will return some promise data
     //     getAllPosts();
     // }, [])
-    console.log(posts)
-    console.log(searchPosts)
     // mount the thing
-    if(!posts){
+    if(posts.length === 0){
         return null
     }
 
@@ -78,11 +76,10 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
             <button className='toggle-sidebar' type='button' onClick={() => setIsSideBarOpen(!isSideBarOpen)}>
                 <FontAwesomeIcon icon={isSideBarOpen ? faCaretRight : faCaretLeft} />
             </button>
-
             
             {isSideBarOpen ? 
                 <>
-                <Box
+                {/* <Box
                     width="100%"
                     gap="3rem"
                     padding="2px 20px"
@@ -103,20 +100,20 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
                     >
                     </InputBase>
 
-                </Box>
+                </Box> */}
 
                 <div className='sidebar-content'>
                     <Box 
-                    display="flex" 
-                    flexDirection={'column'} 
-                    paddingLeft={2}
-                    paddingRight={2}
-                    justifyContent="center" 
-                    alignItems={"center"}
-                    gap = {2}
+                        display="flex" 
+                        flexDirection={'column'} 
+                        paddingLeft={2}
+                        paddingRight={2}
+                        justifyContent="center" 
+                        alignItems={"center"}
+                        gap = {2}
                     > 
-                        {posts.articles && !ready &&
-                            posts.articles.map((item, index) => (
+                        {posts &&
+                            posts.map((item, index) => (
                             <IndivPost 
                                 date={new Date(`${item.date}`).toLocaleDateString()} 
                                 description = {item.description}
@@ -126,6 +123,7 @@ function Sidebar({ data: posts, isSideBarOpen, setIsSideBarOpen }) {
                                 title = {item.title}
                                 key={index} 
                                 url = {item.url}
+                                selectNode = {selectNode}
                             /> 
                         ))}
                         {searchPosts.articles && ready &&

@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@700&display=swap');
 
+$sidebar-width: 450px;
+
 * {
     box-sizing: border-box;
 }
 
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #2F455C;
+    background-color: #282e34;
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 
 .home {
@@ -33,7 +34,6 @@ body {
     bottom: 0;
     transition: .5s;
     padding: 20px;
-    padding-top: 60px;
     z-index: 98;
 }
 
@@ -76,9 +76,9 @@ body {
 }
 
 .sidebar.expanded {
-    width: 500px;
-    background-color: #595D5Eee;
-    box-shadow: 0 0 20px 2px #0000007e;
+    width: $sidebar-width;
+    background-color: #222222EE;
+    box-shadow: 0 0 50px 10px #0000007e;
     color: #607774
 }
 
@@ -169,13 +169,16 @@ line:hover {
 }
 
 .graph-query {
-    background: white;
+    /*background: white;*/
+    background-color: #333333EE;
     position: absolute;
-    top: 100px;
+    top: 84px; /* 20 (right) + 64 (navbar) */
     right: 20px;
-    border: 1px solid lightgrey;
+    /*border: 1px solid lightgrey;*/
     z-index: 98;
-    padding: 0.4em 0 0.8em;
+    box-shadow: 0 0 4px rgba(0,0,0,0.6);
+    padding: 0.4em .5em;
+    padding-left: 0;
     border-radius: 0.4em;
     transition: .5s;
 }
@@ -183,6 +186,7 @@ line:hover {
 .graph-query ul {
     list-style-type: none;
     margin: 0;
+    padding-left: 20px;
     width: 20em;
 }
 
@@ -194,17 +198,34 @@ line:hover {
 }
 
 .graph-query ul li {
+    color: #AAA;
     display: flex;
     align-items: center;
     gap: 0.4em;
+    padding: 5px;
     cursor: pointer;
+    font-size: 10px;
 }
 
 .graph-query ul li:hover {
-    background-color: lightgrey;
+    background-color: #222222AA;
 }
 
 .graph-query.pushed {
-    right: 520px;
+    right: $sidebar-width + 20px;
 }
 
+.name {
+    /* prevent accidental highlight of text */
+    -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.still-simulating-text {
+    width: 100%;
+    color: #607774;
+    font-size: 15px;
+    text-align: center;
+}
