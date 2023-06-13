@@ -1,10 +1,10 @@
 // Feel free to change
-$baseColor1: #2F455C;
+$baseColor1: #2222223D;
 $textColor1: #21D0B2;
 
 .button {
   display: inline-block;
-  padding: .75rem 1.25rem;
+  padding: .75rem 2.25rem;
   border-radius: 10rem;
   color: #fff;
   text-transform: uppercase;
@@ -12,6 +12,7 @@ $textColor1: #21D0B2;
   font-size: 1rem;
   letter-spacing: .15rem;
   transition: all .3s;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -44,4 +45,8 @@ $textColor1: #21D0B2;
       width: 100%;
     }
   }
+}
+
+.button:hover {
+  cursor: pointer;
 }

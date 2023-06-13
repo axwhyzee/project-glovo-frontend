@@ -7,6 +7,10 @@ function NavButton({ navigateTo, buttonName }) {
 
   const handleClick = () => {
     navigate(navigateTo);
+
+    // Force reload if navigating back to home page.
+    // The graph will be all messed up if re-rendered without a full svg reset
+    if (navigateTo === '/') window.location.reload();
   };
 
   return (

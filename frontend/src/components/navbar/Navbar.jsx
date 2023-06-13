@@ -1,10 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import NavButton from '../navbutton/NavButton';
 import './navbar.scss';
 
 function Navbar() {
-  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -12,9 +10,11 @@ function Navbar() {
   };
 
   return (
-    <nav className='navbar'>     
-    <NavButton navigateTo="/" buttonName="Glovo"/>
-      <ul className='nbitems'>
+    <nav className='navbar'>    
+      <ul className='nbitems'> 
+        <li>
+          <NavButton navigateTo="/" buttonName="Glovo"/>
+        </li>
         <li>
           <NavButton navigateTo='/about' buttonName="About Us" />
         </li>
