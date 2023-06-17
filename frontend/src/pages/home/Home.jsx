@@ -25,7 +25,6 @@ function Home({ graphData, postData }) {
 
   return (
     <div className='home'>
-      <Navbar />
       <Sidebar posts={posts} isSideBarOpen={isSideBarOpen} setIsSideBarOpen={setIsSideBarOpen} selectNode={selectNode}/>
       <Panel data={queries} update={setQueries} isSideBarOpen={isSideBarOpen} simulationTime={simulationTime}/>
       <Graph data={graphData} selectNode={selectNode} highlight={resolved} cola_engine={false} simulationTime={simulationTime} setLoading={setLoading}/>

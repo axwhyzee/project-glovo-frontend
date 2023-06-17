@@ -7,7 +7,6 @@ import "./about.scss"
 function About() {
   return (
     <div className='about-page'>
-        <Navbar />
         <Header />
         <Cards />
     </div>
