@@ -34,7 +34,8 @@ body {
     bottom: 0;
     transition: .5s;
     padding: 20px;
-    z-index: 98;
+    margin-top: 64px;
+    z-index: 1;
 }
 
 .sidebar-content {
@@ -187,7 +188,6 @@ line:hover {
     list-style-type: none;
     margin: 0;
     padding-left: 20px;
-    width: 20em;
 }
 
 .graph-query .indicator {

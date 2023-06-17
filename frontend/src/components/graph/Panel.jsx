@@ -51,7 +51,7 @@ function Panel({ data = [], update, isSideBarOpen, simulationTime }) {
             {countdown <= 0 ? (
                 <SearchBox update={append} />
             ) : (
-                <div className='still-simulating-text'>Graph is still simulating {countdown}s ...</div>
+                <div className='still-simulating-text'>Simulation in progress ({countdown}s) ...</div>
             )}
             <ul>
                 {data.map(q => <Query key={q.query} {...q} popQuery={popQuery} />)}
