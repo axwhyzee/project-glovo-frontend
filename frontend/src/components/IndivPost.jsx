@@ -9,6 +9,7 @@ import Chip from '@mui/material/Chip';
 import CNBC from '../assets/logos/CNBC.png';
 import ST from '../assets/logos/ST.png';
 import YAHOO from '../assets/logos/YAHOO.png';
+import './indivPost.scss';
 
 
 const mappings = {
@@ -26,7 +27,8 @@ function IndivPost({title, url, publisher, keywords, date, id, selectNode}) {
               borderRadius: 4
           }}>
             <CardActionArea onClick = {() => window.open(`${url}`)}  >
-              <CardContent 
+              <CardContent
+                className='card-upper' 
                 sx={{
                   display: 'flex', 
                   flexDirection: 'row',
@@ -40,6 +42,7 @@ function IndivPost({title, url, publisher, keywords, date, id, selectNode}) {
                   alt={publisher}
                 />
                 <Typography 
+                  className='card-title'
                   sx={{
                     color: '#F3F3F3',
                     padding: '5px 0 5px 20px'
@@ -51,9 +54,10 @@ function IndivPost({title, url, publisher, keywords, date, id, selectNode}) {
                 </Typography>
               </CardContent>
             </CardActionArea>
-          <CardContent sx={{paddingTop: 0}}>
+          <CardContent sx={{paddingTop: 0}} className='card-lower'>
             {keywords.map((element, index) => (
               <Chip 
+                className='card-chip'
                 key={index} 
                 label={element} 
                 variant="outlined" 

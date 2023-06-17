@@ -1,0 +1,26 @@
+.card-chip {
+    border-radius: 6px !important;
+}
+
+@media only screen and (max-width: 479px) {
+    .card-upper,
+    .card-lower {
+        padding: 10px !important;
+    }
+    .card-upper {
+        flex-direction: column !important;
+    }
+    .card-title {
+        padding: 10px 0 0 0 !important;
+    }
+    .card-lower {
+        padding: 0 10px 10px 10px !important;
+    }
+    .card-chip {
+        height: 18px !important;
+        font-size: 7px !important;
+    }
+    .card-chip span {
+        padding: 5px;
+    }
+}
