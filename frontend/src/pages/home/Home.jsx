@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Sidebar from "./Sidebar";
 import Graph from '../../components/Graph';
 import Panel, { dummy } from '../../components/graph/Panel';
@@ -17,7 +17,7 @@ function Home({ graphData, postData }) {
   const selectNode = async (val) => {
     setLoading(true);
     const temp = await getClusterByKey(val);
-    if (posts) setIsSideBarOpen(true);
+    if (temp) setIsSideBarOpen(true);
     setPosts(temp);
     setLoading(false);
   }
