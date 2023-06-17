@@ -7,7 +7,6 @@ import Navbar from './components/navbar/Navbar';
 
 function App() {
   const [graphData, setGraphData] = useState({ nodes: [], edges: [] });
-  const [postData, setPostData] = useState({});
   return (
     <div>
       <BrowserRouter>
@@ -17,7 +16,7 @@ function App() {
           <Route path="/about" element={<About />}></Route>
         </Routes>
       </BrowserRouter>
-      <DataLoader setGraphData={setGraphData} setPostData={setPostData} />
+      <DataLoader setGraphData={setGraphData} />
     </div>
   );
 }
