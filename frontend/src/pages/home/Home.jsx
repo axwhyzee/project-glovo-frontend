@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from "./Sidebar";
 import Graph from '../../components/Graph';
-import Navbar from '../../components/navbar/Navbar';
 import Panel, { dummy } from '../../components/graph/Panel';
 import Resolver from '../../components/graph/Resolver';
 import { getClusterByKey } from '../../network/api';
