@@ -19,7 +19,7 @@ function Header() {
                     </p>
                     <br/>
                     <p className="text-sm">
-                        Overall, Project Glovo revolutionizes the way news information is consumed. By automating the collection, processing, and visualization of news articles, it empowers users to stay informed about global events efficiently. Whether for research, staying updated on current affairs, or simply exploring diverse perspectives, Glovo offers a user-friendly and visually appealing tool for simplified news ingestion.
+                        Overall, Project Glovo revolutionizes the way news information is consumed. By automating the collection, processing, and visualization of news articles, it empowers users to stay informed about global events efficiently. Whether for research, staying updated on current affairs, or simply exploring diverse perspectives, Project Glovo offers a user-friendly and visually appealing tool for simplified news ingestion.
                     </p>
                 </section>
             </div>
