@@ -1,42 +1,68 @@
 .about-page-header {
     color: #F3F3F3;
+    text-align: center;
 }
 
 .description {
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
+    width: 700px;
+    background: linear-gradient(90deg, #00000000 0%, #000000AA 20%, #000000FF 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-left: 100px; 
+    padding-top: 64px + 20px;
+    margin-left: auto;
 }
 
 .description h1, .description p {
     color: white;
-    font-size: 40px;
     padding: 0 auto;
-}
-
-.header-container video {
-    width: 100%;
-    height: 100%;
-    opacity: 0.15;
 }
 
 .header-container {
     position: relative;
+    // height: 100vh;
+    overflow: hidden;
+    background-color: #000;
 }
+
+.header-container img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.header-container img {
+    opacity: 0.5
+}
+
+.text-sm {
+    font-size: 10px;
+}
+
 
 // mobile: width < 740px
 @media only screen and (max-width: 739px) {
-    .description h1, p {
-        font-size: 28px;
+    .description p {
+        font-size: 8px;
+    }
+    .description h1 {
+        font-size: 12px;
+    }
+    .description {
+        width: 100%;
+        margin: 0;
+        padding-left: 20px;
     }
 }
 
 // tablet: width >= 740px and width < 1024px
-@media only screen and (min-width: 740px) and (max-width: 1023px) {
-    .description h1, p {
-        font-size: 36px;
-    }
-}
+// @media only screen and (min-width: 740px) and (max-width: 1023px) {
+//     .description h1, p {
+//         font-size: 8px;
+//     }
+// }

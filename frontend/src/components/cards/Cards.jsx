@@ -6,7 +6,7 @@ import './Cards.scss'
 function Cards() {
     return (
         <div className='cards'>
-            <h1 className='about-page-header'>Our Team</h1>
+            <h2 className='about-page-header'>Our Team</h2>
             <div className='cards_container'>
                 {Object.entries(team).map(([role, persons]) => (
                     <ul className='card_wrapper'>

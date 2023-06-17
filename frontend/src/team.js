@@ -1,11 +1,11 @@
 import img_jabez from './assets/team/jabez.jpg';
 import img_hai_yen from './assets/team/hai_yen.png';
 import img_john from './assets/team/john.jpg';
-import img_wee_hung from './assets/team/wee_hung.jpg';
-import img_wei_de from './assets/team/wei_de.jpg';
-import img_chinmay from './assets/team/chinmay.jpg';
-import img_viral from './assets/team/viral.jpg';
-import img_shourya from './assets/team/shourya.jpg';
+import img_wee_hung from './assets/team/wee_hung.png';
+import img_wei_de from './assets/team/wei_de.png';
+import img_chinmay from './assets/team/chinmay.png';
+import img_viral from './assets/team/viral.png';
+import img_shourya from './assets/team/shourya.png';
 
 const team = {
     'Project Head': [
@@ -56,7 +56,7 @@ const team = {
         {
             img: img_chinmay,
             name: "Chinmay Prasad",
-            desc: "• NLP keyphrase extraction microservice. Built upon KeyBERT, optimized with vectorizers & seeding\n• Straits Times webscraper",
+            desc: "• KeyBERT keyphrase extraction microservice. Extraction algorithm optimized with vectorizers & seeding\n• Straits Times webscraper",
             linkedIn: "https://www.linkedin.com/in/chinmayprasad28271/",
             github: "https://github.com/Chinmay-002",
             email: "#",
@@ -72,7 +72,7 @@ const team = {
         {
             img: img_shourya,
             name: "Shourya Kuchhal",
-            desc: "• ",
+            desc: "• KeyBERT keyphrase extraction microservice. Extraction algorithm optimized with vectorizers & seeding",
             linkedIn: "https://www.linkedin.com/in/shourya-kuchhal-6ab492232/",
             github: "https://github.com/SHO28",
             email: "#",
