@@ -119,9 +119,20 @@ function renderFocus(focusNode) {
 }
 
 function enableClick(selectNodeCallback) {
-    this.svg.selectAll("g.node").on("click", function (evt, d) {
-        selectNodeCallback(d.name);
-    });
+    let locStart;
+    this.svg.selectAll("g.node")
+        .on("click", function (evt, d) {
+            selectNodeCallback(d.name);
+        })
+        .on("touchstart", function (evt, d) {
+            const evtLoc = evt.changedTouches[0];
+            locStart = (evtLoc.clientX, evtLoc.clientY);
+        })
+        .on("touchend", function (evt, d) {
+            // if user drags, then do not register touch as a node click
+            const evtLoc = evt.changedTouches[0];
+            if ((evtLoc.clientX, evtLoc.clientY) == locStart) selectNodeCallback(d.name);
+        });
 }
 
 function enableHover() {
@@ -266,7 +277,6 @@ function Graph({ data, selectNode, setLoading, highlight, simulationTime, cola_e
     const ctxRef = useRef({});
     const [ref, handlers] = useD3((svg) => {
         if (!data.nodes.length || !data.edges.length) return;
-        console.debug(`Graph rerender`);
         const ctx = ctxRef.current = {};
         // Shared state
         ctx.svg = svg;
