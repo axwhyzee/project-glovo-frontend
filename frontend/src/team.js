@@ -22,7 +22,7 @@ const team = {
         {
             img: img_wei_de,
             name: "Leong Wei De",
-            desc: "• D3JS graph centerpiece & peripheral components\n• Custom hooks & dataloaders",
+            desc: "• D3JS graph centerpiece & peripheral components\n• Custom hooks & dataloaders\n• Headless graph simulation",
             linkedIn: "https://www.linkedin.com/in/leong-wei-de-761371240/",
             github: "https://github.com/rxEckT",
             email: "#",
