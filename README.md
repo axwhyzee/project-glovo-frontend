@@ -1,4 +1,5 @@
 # **Project GloVo**
+[Live website](https://projectglovo.netlify.app/)
 #### Streamlining the consumption of global news
 
 ## Description
